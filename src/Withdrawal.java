@@ -24,7 +24,7 @@ public class Withdrawal extends Transaction {
 
 		String profileType = account.getProfileType();
 		BigDecimal balance = account.getBalance();
-		int balanceStatusAfter = w.checkBalanceAfterWithdrawal(balance, value);
+		int balanceStatusAfter = w.checkEnoughFounds(balance, value);
 
 		if (profileType == "Normal") {
 			if (balanceStatusAfter >= 0) {
@@ -50,7 +50,7 @@ public class Withdrawal extends Transaction {
 	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
 	 * value
 	 */
-	private int checkBalanceAfterWithdrawal(BigDecimal balance, BigDecimal value) {
+	private int checkEnoughFounds(BigDecimal balance, BigDecimal value) {
 		return balance.compareTo(value);
 	}
 

@@ -1,4 +1,4 @@
 
-public class Transfer {
+public class Transfer extends Transaction{
 
 }
