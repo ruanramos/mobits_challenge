@@ -46,7 +46,7 @@ public class Withdrawal extends Transaction {
 				}
 			}
 		}
-		// need to add w to account transactions list
+		account.transactions.add(w);
 		return w;
 	}
 
