@@ -15,7 +15,7 @@ public class Account {
 	 * 
 	 */
 	private BigDecimal balance;
-	private ArrayList<Transaction> transactions;
+	public ArrayList<Transaction> transactions;
 
 	public Account(long accountNumber, String profileType, BigDecimal balance, ArrayList<Transaction> transactions) {
 		this.accountNumber = accountNumber;
@@ -42,10 +42,6 @@ public class Account {
 
 	public ArrayList<Transaction> getTransactions() {
 		return transactions;
-	}
-
-	public void setTransactions(ArrayList<Transaction> transactions) {
-		this.transactions = transactions;
 	}
 
 	public String getProfileType() {
