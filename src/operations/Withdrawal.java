@@ -50,24 +50,6 @@ public class Withdrawal extends Transaction {
 		return w;
 	}
 
-	/**
-	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
-	 * value
-	 */
-	private int checkEnoughFounds(BigDecimal balance, BigDecimal value) {
-		return balance.compareTo(value);
-	}
-
-	private void subtractBalance(Account account, BigDecimal value) {
-		try {
-			BigDecimal newBalance = account.getBalance().subtract(value);
-			account.setBalance(newBalance);
-			System.out.println("Operation successfully completed. New balance: " + newBalance);
-		} catch (Exception e) {
-			System.out.println("Error: " + e);
-		}
-	}
-
 	private void waitAndApplyTax(int minutes, BigDecimal balance, BigDecimal tax) {
 		try {
 			Thread.sleep(60 * 1000 * minutes);

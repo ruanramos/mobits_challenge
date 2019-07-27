@@ -3,6 +3,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import account.Account;
+
 /**
  * This class will be the base class for any transaction, 
  * such as Withdrawal or Transfer
@@ -21,6 +23,34 @@ public abstract class Transaction {
 		this.time = time;
 		this.value = value;
 		this.description = description;
+	}
+	
+	/**
+	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
+	 * value
+	 */
+	public int checkEnoughFounds(BigDecimal balance, BigDecimal value) {
+		return balance.compareTo(value);
+	}
+
+	public void subtractBalance(Account account, BigDecimal value) {
+		try {
+			BigDecimal newBalance = account.getBalance().subtract(value);
+			account.setBalance(newBalance);
+			System.out.println("Operation successfully completed. New balance: " + newBalance);
+		} catch (Exception e) {
+			System.out.println("Error: " + e);
+		}
+	}
+	
+	public void addBalance(Account account, BigDecimal value) {
+		try {
+			BigDecimal newBalance = account.getBalance().add(value);
+			account.setBalance(newBalance);
+			System.out.println("Operation successfully completed. New balance: " + newBalance);
+		} catch (Exception e) {
+			System.out.println("Error: " + e);
+		}
 	}
 
 	public LocalTime getTime() {
