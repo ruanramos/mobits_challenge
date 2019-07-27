@@ -29,8 +29,10 @@ public abstract class Transaction {
 	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
 	 * value
 	 */
-	public int checkEnoughFounds(BigDecimal balance, BigDecimal value) {
-		return balance.compareTo(value);
+	public boolean checkEnoughFounds(BigDecimal balance, BigDecimal value) {
+		int enoughFounds = balance.compareTo(value);
+		if (enoughFounds < 0) return false;
+		return true;
 	}
 
 	public void subtractBalance(Account account, BigDecimal value) {

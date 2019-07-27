@@ -27,17 +27,17 @@ public class Withdrawal extends Transaction {
 
 		String profileType = account.getProfileType();
 		BigDecimal balance = account.getBalance();
-		int balanceStatusAfter = w.checkEnoughFounds(balance, value);
+		boolean enoughFounds = w.checkEnoughFounds(balance, value);
 
 		if (profileType == "Normal") {
-			if (balanceStatusAfter >= 0) {
+			if (enoughFounds) {
 				w.subtractBalance(account, value);
 			} else {
 				System.out.println(String.format("%s %o.",
 						"Error: Not enough balance for the operation on account number ", account.getAccountNumber()));
 			}
 		} else if (profileType == "VIP") {
-			if (balanceStatusAfter >= 0) {
+			if (enoughFounds) {
 				w.subtractBalance(account, value);
 			} else {
 				BigDecimal currentBalance = account.getBalance();
