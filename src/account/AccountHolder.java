@@ -4,7 +4,7 @@ public class AccountHolder {
 
 	private String profileType;
 	private Account account;
-	private String password;
+	private String password; // needs to be hashed
 
 	public AccountHolder(String profileType, Account account, String password) {
 		this.profileType = profileType;

@@ -40,10 +40,6 @@ public class Account {
 		this.accountNumber = accountNumber;
 	}
 
-	public ArrayList<Transaction> getTransactions() {
-		return transactions;
-	}
-
 	public String getProfileType() {
 		return profileType;
 	}
