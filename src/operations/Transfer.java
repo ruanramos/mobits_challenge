@@ -8,20 +8,31 @@ import account.Account;
 
 public class Transfer extends Transaction {
 
-	private Account destinationAccount;
 	private Account originAccount;
+	private Account destinationAccount;
 	private BigDecimal maxTransferValue;
 	private BigDecimal normalTransferTax;
 	private BigDecimal VipTransferTax;
 
-	public Transfer(LocalDate date, LocalTime time, BigDecimal value, String description, Account destinationAccount,
-			Account originAccount) {
+	/**
+	 * Used a private constructor, instantiating the class with the static method
+	 * makeWithdrawal() for encapsulation
+	 */
+	private Transfer(LocalDate date, LocalTime time, BigDecimal value, String description, Account originAccount,
+			Account destinationAccount) {
 		super(date, time, value, description);
-		this.destinationAccount = destinationAccount;
 		this.originAccount = originAccount;
+		this.destinationAccount = destinationAccount;
 		this.maxTransferValue = new BigDecimal("1000");
 		this.normalTransferTax = new BigDecimal("8");
 		this.VipTransferTax = new BigDecimal("0.008");
+	}
+
+	static Transfer makeTransfer(LocalDate date, LocalTime time, BigDecimal value, String description,
+			Account originAccount, Account destinationAccount) {
+		Transfer t = new Transfer(date, time, value, description, originAccount, destinationAccount);
+		
+		return t;
 	}
 
 	public Account getDestinationAccount() {
