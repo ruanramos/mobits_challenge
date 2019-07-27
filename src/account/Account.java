@@ -47,5 +47,14 @@ public class Account {
 	public void setProfileType(String profileType) {
 		this.profileType = profileType;
 	}
+	
+	/**
+	 * Kind of a getter, so that, even with transactions being public, 
+	 * other classes can't access it directly, only get a copy
+	 */
+	public ArrayList<Transaction> listTransactions() {
+		ArrayList<Transaction> transactionsList = new ArrayList<Transaction>(transactions);
+		return transactionsList;
+	}
 
 }
