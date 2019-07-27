@@ -31,8 +31,39 @@ public class Transfer extends Transaction {
 	static Transfer makeTransfer(LocalDate date, LocalTime time, BigDecimal value, String description,
 			Account originAccount, Account destinationAccount) {
 		Transfer t = new Transfer(date, time, value, description, originAccount, destinationAccount);
-		
+
+		String originProfileType = originAccount.getProfileType();
+		BigDecimal originBalance = originAccount.getBalance();
+		boolean enoughFounds = t.checkEnoughFounds(originBalance, value);
+		boolean valueSmallerThanLimit = t.valueSmallerThanLimit(value);
+
+		if (originProfileType == "Normal") {
+			if (enoughFounds) {
+				if (valueSmallerThanLimit) {
+					t.subtractBalance(originAccount, value); // needs to apply tax
+					t.addBalance(destinationAccount, value);
+				} else {
+					System.out.println("Error: Limit for transfer exceeded");
+				}
+			} else {
+				System.out.println("Error: not enough founds for the transaction");
+			}
+		} else if (originProfileType == "VIP") {
+			if (enoughFounds) {
+				t.subtractBalance(originAccount, value); // needs to apply tax
+				t.addBalance(destinationAccount, value);
+			} else {
+				System.out.println("Error: not enough founds for the transaction");
+			}
+		}
+
+		originAccount.transactions.add(t);
+		destinationAccount.transactions.add(t);
 		return t;
+	}
+
+	private boolean valueSmallerThanLimit(BigDecimal value) {
+		return (value.compareTo(this.maxTransferValue) < 0);
 	}
 
 	public Account getDestinationAccount() {
