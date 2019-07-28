@@ -29,13 +29,13 @@ public abstract class Transaction {
 	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
 	 * value
 	 */
-	public boolean checkEnoughFounds(BigDecimal balance, BigDecimal value) {
+	static boolean checkEnoughFounds(BigDecimal balance, BigDecimal value) {
 		int enoughFounds = balance.compareTo(value);
 		if (enoughFounds < 0) return false;
 		return true;
 	}
 
-	public void subtractBalance(Account account, BigDecimal value) {
+	static void subtractBalance(Account account, BigDecimal value) {
 		try {
 			BigDecimal newBalance = account.getBalance().subtract(value);
 			account.setBalance(newBalance);
@@ -45,7 +45,17 @@ public abstract class Transaction {
 		}
 	}
 	
-	public void addBalance(Account account, BigDecimal value) {
+	
+	static BigDecimal applyFixedTax(BigDecimal value, BigDecimal fixedTax) {
+		return value.add(fixedTax);
+	}
+	
+	static BigDecimal applyPercentageTax(BigDecimal value, BigDecimal percentageTax) {
+		BigDecimal multiplier = new BigDecimal("1.0").add(percentageTax);
+		return value.multiply(multiplier);
+	}
+	
+	static void addBalance(Account account, BigDecimal value) {
 		try {
 			BigDecimal newBalance = account.getBalance().add(value);
 			account.setBalance(newBalance);
