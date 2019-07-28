@@ -10,9 +10,9 @@ public class Transfer extends Transaction {
 
 	private Account originAccount;
 	private Account destinationAccount;
-	private BigDecimal maxTransferValue;
-	private BigDecimal normalTransferTax;
-	private BigDecimal VipTransferTax;
+	static BigDecimal maxTransferValue;
+	static BigDecimal normalTransferTax;
+	static BigDecimal VipTransferTax;
 
 	/**
 	 * Used a private constructor, instantiating the class with the static method
@@ -23,9 +23,9 @@ public class Transfer extends Transaction {
 		super(date, time, value, description);
 		this.originAccount = originAccount;
 		this.destinationAccount = destinationAccount;
-		this.maxTransferValue = new BigDecimal("1000");
-		this.normalTransferTax = new BigDecimal("8");
-		this.VipTransferTax = new BigDecimal("0.008");
+		Transfer.maxTransferValue = new BigDecimal("1000");
+		Transfer.normalTransferTax = new BigDecimal("8");
+		Transfer.VipTransferTax = new BigDecimal("0.008");
 	}
 
 	static Transfer makeTransfer(LocalDate date, LocalTime time, BigDecimal value, String description,
@@ -34,14 +34,15 @@ public class Transfer extends Transaction {
 
 		String originProfileType = originAccount.getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
-		boolean enoughFounds = t.checkEnoughFounds(originBalance, value);
+		boolean enoughFounds = Transaction.checkEnoughFounds(originBalance, value);
 		boolean valueSmallerThanLimit = t.valueSmallerThanLimit(value);
 
 		if (originProfileType == "Normal") {
 			if (enoughFounds) {
 				if (valueSmallerThanLimit) {
-					t.subtractBalance(originAccount, value); // needs to apply tax
-					t.addBalance(destinationAccount, value);
+					BigDecimal realValue = Transfer.applyFixedTax(value, normalTransferTax);
+					Transaction.subtractBalance(originAccount, realValue);
+					Transaction.addBalance(destinationAccount, realValue);
 				} else {
 					System.out.println("Error: Limit for transfer exceeded");
 				}
@@ -50,20 +51,20 @@ public class Transfer extends Transaction {
 			}
 		} else if (originProfileType == "VIP") {
 			if (enoughFounds) {
-				t.subtractBalance(originAccount, value); // needs to apply tax
-				t.addBalance(destinationAccount, value);
+				BigDecimal realValue = Transfer.applyPercentageTax(value, VipTransferTax);
+				Transaction.subtractBalance(originAccount, realValue);
+				Transaction.addBalance(destinationAccount, realValue);
 			} else {
 				System.out.println("Error: not enough founds for the transaction");
 			}
 		}
-
 		originAccount.transactions.add(t);
 		destinationAccount.transactions.add(t);
 		return t;
 	}
 
 	private boolean valueSmallerThanLimit(BigDecimal value) {
-		return (value.compareTo(this.maxTransferValue) < 0);
+		return (value.compareTo(Transfer.maxTransferValue) < 0);
 	}
 
 	public Account getDestinationAccount() {
@@ -87,7 +88,7 @@ public class Transfer extends Transaction {
 	}
 
 	public void setMaxTransferValue(BigDecimal maxTransferValue) {
-		this.maxTransferValue = maxTransferValue;
+		Transfer.maxTransferValue = maxTransferValue;
 	}
 
 	public BigDecimal getNormalTransferTax() {
@@ -95,7 +96,7 @@ public class Transfer extends Transaction {
 	}
 
 	public void setNormalTransferTax(BigDecimal normalTransferTax) {
-		this.normalTransferTax = normalTransferTax;
+		Transfer.normalTransferTax = normalTransferTax;
 	}
 
 	public BigDecimal getVipTransferTax() {
