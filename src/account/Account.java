@@ -2,7 +2,7 @@ package account;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import operations.Transaction;
+import account_operations.Transaction;
 
 public class Account {
 

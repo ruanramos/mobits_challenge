@@ -4,7 +4,13 @@ public class AccountHolder {
 
 	private String profileType;
 	private Account account;
-	private String password; // needs to be hashed
+
+	/**
+	 * For security, we need to protect the password. We could use encryption or
+	 * hashing. Made the option for hashing, since it gives no way back and it's
+	 * more secure.
+	 */
+	private String password;
 
 	public AccountHolder(String profileType, Account account, String password) {
 		this.profileType = profileType;
