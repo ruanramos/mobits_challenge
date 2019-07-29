@@ -30,12 +30,11 @@ public class Transfer extends Transaction {
 		Transfer.VipTransferTax = new BigDecimal("0.008");
 	}
 
-	// TODO treat concurrency problems
 	static Transfer makeTransfer(LocalDate date, LocalTime time, BigDecimal value, String description,
 			Account originAccount, Account destinationAccount) {
 		Transfer t = new Transfer(date, time, value, description, originAccount, destinationAccount);
 
-		String originProfileType = originAccount.getProfileType();
+		String originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
 		boolean enoughFounds = Transaction.checkEnoughFounds(originBalance, value);
 		boolean valueSmallerThanLimit = t.valueSmallerThanLimit(value);

@@ -8,7 +8,7 @@ import account_operations.Transaction;
 public class Account {
 
 	private long accountNumber;
-	private String profileType;
+	private AccountHolder accountHolder;
 	/**
 	 * 
 	 * The decision of using BigDecimal is to avoid the inaccuracy of float and
@@ -18,11 +18,11 @@ public class Account {
 	private BigDecimal balance;
 	public ArrayList<Transaction> transactions;
 
-	public Account(long accountNumber, String profileType, BigDecimal balance, ArrayList<Transaction> transactions) {
+	public Account(long accountNumber, BigDecimal balance, AccountHolder accountHolder) {
 		this.accountNumber = accountNumber;
-		this.setProfileType(profileType);
 		this.balance = balance;
-		this.transactions = transactions;
+		this.setAccountHolder(accountHolder);
+		this.transactions = new ArrayList<Transaction>();
 	}
 
 	public BigDecimal getBalance() {
@@ -41,14 +41,6 @@ public class Account {
 		this.accountNumber = accountNumber;
 	}
 
-	public String getProfileType() {
-		return profileType;
-	}
-
-	public void setProfileType(String profileType) {
-		this.profileType = profileType;
-	}
-
 	/**
 	 * Kind of a getter, so that, even with transactions being public, other classes
 	 * can't access it directly, only get a copy
@@ -56,6 +48,14 @@ public class Account {
 	public ArrayList<Transaction> listTransactions() {
 		ArrayList<Transaction> transactionsList = new ArrayList<Transaction>(transactions);
 		return transactionsList;
+	}
+
+	public AccountHolder getAccountHolder() {
+		return accountHolder;
+	}
+
+	public void setAccountHolder(AccountHolder accountHolder) {
+		this.accountHolder = accountHolder;
 	}
 
 }

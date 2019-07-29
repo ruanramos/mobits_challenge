@@ -27,7 +27,7 @@ public class Withdrawal extends Transaction {
 			Account account) {
 		Withdrawal w = new Withdrawal(date, time, value, description, account);
 
-		String profileType = account.getProfileType();
+		String profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
 		boolean enoughFounds = Transaction.checkEnoughFounds(balance, value);
 
