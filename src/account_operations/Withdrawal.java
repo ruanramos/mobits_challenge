@@ -5,15 +5,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import account.Account;
-import account.AccountsManager.profileTypes;
+import bank_management.BusinessRules.profileTypes;
+import bank_management.BusinessRules;
 
 public class Withdrawal extends Transaction {
 
 	// TODO treat concurrency problems
 
 	private Account account;
-	static BigDecimal tax = new BigDecimal("0.1");
-	static final int taxApplicationInterval = 1;
 
 	/**
 	 * Used a private constructor, instantiating the class with the static method
@@ -46,7 +45,8 @@ public class Withdrawal extends Transaction {
 			} else {
 				BigDecimal currentBalance = account.getBalance();
 				while (currentBalance.compareTo(BigDecimal.ZERO) < 0) {
-					w.waitAndApplyTax(taxApplicationInterval, currentBalance, w.getTax());
+					Transaction.waitAndApplyTax(account, BusinessRules.getTaxapplicationinterval(), currentBalance,
+							BusinessRules.getNegativebalancetax());
 				}
 			}
 		}
@@ -54,16 +54,9 @@ public class Withdrawal extends Transaction {
 		return w;
 	}
 
-	private void waitAndApplyTax(int minutesInterval, BigDecimal balance, BigDecimal tax) {
-		try {
-			Thread.sleep(60 * 1000 * minutesInterval);
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
-		BigDecimal currentBalance = account.getBalance();
-		account.setBalance(currentBalance.subtract(currentBalance.multiply(tax)));
-	}
-
+	/**
+	 * Getters and setters
+	 */
 	public Account getAccount() {
 		return account;
 	}
@@ -71,13 +64,4 @@ public class Withdrawal extends Transaction {
 	public void setAccount(Account account) {
 		this.account = account;
 	}
-
-	public BigDecimal getTax() {
-		return tax;
-	}
-
-	public void setTax(BigDecimal tax) {
-		Withdrawal.tax = tax;
-	}
-
 }

@@ -1,6 +1,6 @@
 package account;
 
-import account.AccountsManager.profileTypes;
+import bank_management.BusinessRules.profileTypes;
 
 public class AccountHolder {
 

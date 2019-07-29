@@ -62,11 +62,30 @@ public abstract class Transaction {
 		return value.add(fixedTax);
 	}
 
+	static BigDecimal calculatePercentageFee(BigDecimal value, BigDecimal percentageTax) {
+		return value.multiply(percentageTax);
+	}
+	
 	static BigDecimal applyPercentageTax(BigDecimal value, BigDecimal percentageTax) {
 		BigDecimal multiplier = BigDecimal.ONE.add(percentageTax);
 		return value.multiply(multiplier);
 	}
 
+	static void waitAndApplyTax(Account account, int minutesInterval, BigDecimal balance, BigDecimal tax) {
+		try {
+			Thread.sleep(60 * 1000 * minutesInterval);
+		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+		BigDecimal currentBalance = account.getBalance();
+		if (currentBalance.compareTo(BigDecimal.ZERO) < 0) {
+			account.setBalance(currentBalance.subtract(currentBalance.multiply(tax)));
+		}
+	}
+
+	/**
+	 * Getters and setters
+	 */
 	public LocalTime getTime() {
 		return time;
 	}

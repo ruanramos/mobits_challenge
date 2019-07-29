@@ -4,19 +4,16 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Random;
 
+import bank_management.BusinessRules;
+import bank_management.BusinessRules.profileTypes;
+
 public class AccountsManager {
 
 	static ArrayList<Account> existingAccounts;
 	static ArrayList<AccountHolder> existingAccountHolders;
-	static final int lenAccountNumber = 8;
-	static final int lenPassword = 6;
-
-	public static enum profileTypes {
-		NORMAL, VIP;
-	}
 
 	static AccountHolder createAccountHolder(profileTypes profileType) {
-		String password = generateSimplePassword(lenPassword);
+		String password = generateSimplePassword(BusinessRules.getLenpassword());
 		AccountHolder accHolder = new AccountHolder(profileType, password);
 		existingAccountHolders.add(accHolder);
 		return accHolder;
@@ -26,7 +23,7 @@ public class AccountsManager {
 	 * initial balance = 0
 	 */
 	static Account createAccount(AccountHolder accountHolder) {
-		long accountNumber = generateAccountNumber(lenAccountNumber);
+		long accountNumber = generateAccountNumber(BusinessRules.getLenaccountnumber());
 		Account acc = new Account(accountNumber, accountHolder);
 		existingAccounts.add(acc);
 		return acc;
@@ -36,7 +33,7 @@ public class AccountsManager {
 	 * given initial balance
 	 */
 	static Account createAccount(BigDecimal startingBalance, AccountHolder accountHolder) {
-		long accountNumber = generateAccountNumber(lenAccountNumber);
+		long accountNumber = generateAccountNumber(BusinessRules.getLenaccountnumber());
 		Account acc = new Account(accountNumber, accountHolder, startingBalance);
 		existingAccounts.add(acc);
 		return acc;
@@ -73,6 +70,10 @@ public class AccountsManager {
 		return generatedString;
 	}
 
+	/**
+	 * Getters and setters
+	 */
+	
 	/**
 	 * Kind of a getter, so that, even with existingAccounts being public, other
 	 * classes can't access it directly, only get a copy

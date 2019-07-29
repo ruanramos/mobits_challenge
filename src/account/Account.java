@@ -35,6 +35,9 @@ public class Account {
 		this.transactions = new ArrayList<Transaction>();
 	}
 
+	/**
+	 * Getters and setters
+	 */
 	public BigDecimal getBalance() {
 		return balance;
 	}
