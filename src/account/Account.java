@@ -12,7 +12,8 @@ public class Account {
 	/**
 	 * 
 	 * The decision of using BigDecimal is to avoid the inaccuracy of float and
-	 * double on monetary calculation
+	 * double on monetary calculation. Every value that can be or will be used on
+	 * monetary calculation is set to BigDecimal
 	 * 
 	 */
 	private BigDecimal balance;
@@ -22,7 +23,7 @@ public class Account {
 		this.accountNumber = accountNumber;
 		this.accountHolder = accountHolder;
 
-		this.balance = new BigDecimal("0");
+		this.balance = BigDecimal.ZERO;
 		this.transactions = new ArrayList<Transaction>();
 	}
 

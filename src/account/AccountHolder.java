@@ -1,8 +1,10 @@
 package account;
 
+import account.AccountsManager.profileTypes;
+
 public class AccountHolder {
 
-	private String profileType;
+	private profileTypes profileType;
 	private Account account;
 
 	/**
@@ -12,16 +14,16 @@ public class AccountHolder {
 	 */
 	private String password;
 
-	public AccountHolder(String profileType, String password) {
+	public AccountHolder(profileTypes profileType, String password) {
 		this.profileType = profileType; // made profileType binded to the holder, not the account
 		this.password = password;
 	}
 
-	public String getProfileType() {
+	public profileTypes getProfileType() {
 		return profileType;
 	}
 
-	public void setProfileType(String profileType) {
+	public void setProfileType(profileTypes profileType) {
 		this.profileType = profileType;
 	}
 

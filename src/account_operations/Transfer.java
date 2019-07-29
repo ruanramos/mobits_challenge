@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import account.Account;
+import account.AccountsManager.profileTypes;
 
 public class Transfer extends Transaction {
 
@@ -31,16 +32,17 @@ public class Transfer extends Transaction {
 		Transfer.VipTransferTax = new BigDecimal("0.008");
 	}
 
+	// TODO treat errors better
 	static Transfer makeTransfer(LocalDate date, LocalTime time, BigDecimal value, String description,
 			Account originAccount, Account destinationAccount) {
 		Transfer t = new Transfer(date, time, value, description, originAccount, destinationAccount);
 
-		String originProfileType = originAccount.getAccountHolder().getProfileType();
+		profileTypes originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
 		boolean enoughFounds = Transaction.checkEnoughFounds(originBalance, value);
 		boolean valueSmallerThanLimit = t.valueSmallerThanLimit(value);
 
-		if (originProfileType == "Normal") {
+		if (originProfileType == profileTypes.NORMAL) {
 			if (enoughFounds) {
 				if (valueSmallerThanLimit) {
 					BigDecimal realValue = Transfer.applyFixedTax(value, normalTransferTax);
@@ -52,7 +54,7 @@ public class Transfer extends Transaction {
 			} else {
 				System.out.println("Error: not enough founds for the transaction");
 			}
-		} else if (originProfileType == "VIP") {
+		} else if (originProfileType == profileTypes.VIP) {
 			if (enoughFounds) {
 				BigDecimal realValue = Transfer.applyPercentageTax(value, VipTransferTax);
 				Transaction.subtractBalance(originAccount, realValue);

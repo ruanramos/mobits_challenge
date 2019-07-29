@@ -11,13 +11,13 @@ public class AccountsManager {
 	static final int lenAccountNumber = 8;
 	static final int lenPassword = 6;
 
-	static enum profileTypes {
+	public static enum profileTypes {
 		NORMAL, VIP;
 	}
 
 	static AccountHolder createAccountHolder(profileTypes profileType) {
 		String password = generateSimplePassword(lenPassword);
-		AccountHolder accHolder = new AccountHolder(profileType.toString(), password);
+		AccountHolder accHolder = new AccountHolder(profileType, password);
 		existingAccountHolders.add(accHolder);
 		return accHolder;
 	}

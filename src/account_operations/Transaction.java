@@ -36,9 +36,21 @@ public abstract class Transaction {
 		return true;
 	}
 
+	// TODO treat errors better
 	static void subtractBalance(Account account, BigDecimal value) {
 		try {
 			BigDecimal newBalance = account.getBalance().subtract(value);
+			account.setBalance(newBalance);
+			System.out.println("Operation successfully completed. New balance: " + newBalance);
+		} catch (Exception e) {
+			System.out.println("Error: " + e);
+		}
+	}
+
+	// TODO treat errors better
+	static void addBalance(Account account, BigDecimal value) {
+		try {
+			BigDecimal newBalance = account.getBalance().add(value);
 			account.setBalance(newBalance);
 			System.out.println("Operation successfully completed. New balance: " + newBalance);
 		} catch (Exception e) {
@@ -51,18 +63,8 @@ public abstract class Transaction {
 	}
 
 	static BigDecimal applyPercentageTax(BigDecimal value, BigDecimal percentageTax) {
-		BigDecimal multiplier = new BigDecimal("1.0").add(percentageTax);
+		BigDecimal multiplier = BigDecimal.ONE.add(percentageTax);
 		return value.multiply(multiplier);
-	}
-
-	static void addBalance(Account account, BigDecimal value) {
-		try {
-			BigDecimal newBalance = account.getBalance().add(value);
-			account.setBalance(newBalance);
-			System.out.println("Operation successfully completed. New balance: " + newBalance);
-		} catch (Exception e) {
-			System.out.println("Error: " + e);
-		}
 	}
 
 	public LocalTime getTime() {
