@@ -18,10 +18,19 @@ public class Account {
 	private BigDecimal balance;
 	public ArrayList<Transaction> transactions;
 
-	public Account(long accountNumber, BigDecimal balance, AccountHolder accountHolder) {
+	public Account(long accountNumber, AccountHolder accountHolder) {
 		this.accountNumber = accountNumber;
+		this.accountHolder = accountHolder;
+
+		this.balance = new BigDecimal("0");
+		this.transactions = new ArrayList<Transaction>();
+	}
+
+	public Account(long accountNumber, AccountHolder accountHolder, BigDecimal balance) {
+		this.accountNumber = accountNumber;
+		this.accountHolder = accountHolder;
 		this.balance = balance;
-		this.setAccountHolder(accountHolder);
+
 		this.transactions = new ArrayList<Transaction>();
 	}
 

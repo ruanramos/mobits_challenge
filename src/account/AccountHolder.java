@@ -12,9 +12,8 @@ public class AccountHolder {
 	 */
 	private String password;
 
-	public AccountHolder(String profileType, Account account, String password) {
-		this.profileType = profileType;
-		this.account = account;
+	public AccountHolder(String profileType, String password) {
+		this.profileType = profileType; // made profileType binded to the holder, not the account
 		this.password = password;
 	}
 
