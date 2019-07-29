@@ -6,37 +6,46 @@ import java.util.Random;
 
 public class AccountsManager {
 
-	private ArrayList<Account> existingAccounts;
-	private final int lenAccountNumber = 8;
-	private final int lenPassword = 6;
+	static ArrayList<Account> existingAccounts;
+	static ArrayList<AccountHolder> existingAccountHolders;
+	static final int lenAccountNumber = 8;
+	static final int lenPassword = 6;
 
-	private enum profileTypes {
+	static enum profileTypes {
 		NORMAL, VIP;
 	}
 
-	private AccountHolder createAccountHolder(profileTypes profileType) {
+	static AccountHolder createAccountHolder(profileTypes profileType) {
 		String password = generateSimplePassword(lenPassword);
 		AccountHolder accHolder = new AccountHolder(profileType.toString(), password);
+		existingAccountHolders.add(accHolder);
 		return accHolder;
 	}
 
 	/**
 	 * initial balance = 0
 	 */
-	private Account createAccount(AccountHolder accountHolder) {
+	static Account createAccount(AccountHolder accountHolder) {
 		long accountNumber = generateAccountNumber(lenAccountNumber);
-		return new Account(accountNumber, accountHolder);
+		Account acc = new Account(accountNumber, accountHolder);
+		existingAccounts.add(acc);
+		return acc;
 	}
-	
+
 	/**
 	 * given initial balance
 	 */
-	private Account createAccount(BigDecimal startingBalance, AccountHolder accountHolder) {
+	static Account createAccount(BigDecimal startingBalance, AccountHolder accountHolder) {
 		long accountNumber = generateAccountNumber(lenAccountNumber);
-		return new Account(accountNumber, accountHolder, startingBalance);
+		Account acc = new Account(accountNumber, accountHolder, startingBalance);
+		existingAccounts.add(acc);
+		return acc;
 	}
 
-	private long generateAccountNumber(int length) {
+	/**
+	 * Just a simple account number generator for creating an account
+	 */
+	static long generateAccountNumber(int length) {
 		String number = "";
 		Random rand = new Random();
 		for (int i = 0; i < length; i++) {
@@ -48,7 +57,7 @@ public class AccountsManager {
 	/**
 	 * Just a simple password generator for creating an accountHolder
 	 */
-	public String generateSimplePassword(int length) {
+	static String generateSimplePassword(int length) {
 
 		int leftLimit = 97; // letter 'a'
 		int rightLimit = 122; // letter 'z'
@@ -65,11 +74,20 @@ public class AccountsManager {
 	}
 
 	/**
-	 * Kind of a getter, so that, even with transactions being public, other classes
-	 * can't access it directly, only get a copy
+	 * Kind of a getter, so that, even with existingAccounts being public, other
+	 * classes can't access it directly, only get a copy
 	 */
 	public ArrayList<Account> listExistingAccounts() {
 		ArrayList<Account> accounts = new ArrayList<Account>(existingAccounts);
 		return accounts;
+	}
+
+	/**
+	 * Kind of a getter, so that, even with existingAccountHolders being public,
+	 * other classes can't access it directly, only get a copy
+	 */
+	public ArrayList<AccountHolder> listExistingAccountHolders() {
+		ArrayList<AccountHolder> accountHolders = new ArrayList<AccountHolder>(existingAccountHolders);
+		return accountHolders;
 	}
 }
