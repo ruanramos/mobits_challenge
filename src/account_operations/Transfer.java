@@ -15,6 +15,7 @@ public class Transfer extends Transaction {
 	static BigDecimal maxTransferValue;
 	static BigDecimal normalTransferTax;
 	static BigDecimal VipTransferTax;
+	private BigDecimal feeCharged;
 
 	/**
 	 * Used a private constructor, instantiating the class with the static method
