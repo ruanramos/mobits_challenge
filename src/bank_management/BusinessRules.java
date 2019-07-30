@@ -30,31 +30,31 @@ public class BusinessRules {
 	/**
 	 * Getters and Setters
 	 */
-	public static BigDecimal getNormaltransfertax() {
+	public static BigDecimal getNormalTransferTax() {
 		return normalTransferTax;
 	}
 
-	public static BigDecimal getViptransfertax() {
+	public static BigDecimal getVipTransferTax() {
 		return VipTransferTax;
 	}
 
-	public static BigDecimal getNormalMaxtransfervalue() {
+	public static BigDecimal getNormalMaxTransferValue() {
 		return normalMaxTransferValue;
 	}
 
-	public static int getLenaccountnumber() {
+	public static int getLenAccountnumber() {
 		return lenAccountNumber;
 	}
 
-	public static int getLenpassword() {
+	public static int getLenPassword() {
 		return lenPassword;
 	}
 
-	public static BigDecimal getNegativebalancetax() {
+	public static BigDecimal getNegativebalanceTax() {
 		return negativeBalanceTax;
 	}
 
-	public static int getTaxapplicationinterval() {
+	public static int getTaxapplicationInterval() {
 		return taxApplicationInterval;
 	}
 
