@@ -7,8 +7,8 @@ public class BusinessRules {
 	/**
 	 * Account related
 	 */
-	private static final int lenAccountNumber = 8;
-	private static final int lenPassword = 6;
+	private static final int lenAccountNumber = 5;
+	private static final int lenPassword = 4;
 
 	public static enum profileTypes {
 		NORMAL, VIP;
