@@ -1,30 +1,40 @@
 package account_operations;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Statement {
+import account.Account;
 
-	private String description;
-	private ArrayList<Transaction> transitions;
-	
-	public Statement(String description, ArrayList<Transaction> transitions) {
-		super();
-		this.description = description;
-		this.transitions = transitions;
+public class Statement extends Transaction {
+
+	private Account account;
+
+	private Statement(LocalDate date, LocalTime time, BigDecimal value, String description, Account account) {
+		super(date, time, value, description);
+		this.account = account;
 	}
 
-	public String getDescription() {
-		return description;
+	static Statement generateStatement(LocalDate date, LocalTime time, BigDecimal value, String description,
+			Account account) {
+
+		BigDecimal balance = account.getBalance();
+
+		for (Object transaction : account.listTransactions()) {
+			System.out.println(transaction.toString());
+		}
+		Statement s = new Statement(date, time, value, description, account);
+		s.getAccount().transactions.add(s);
+		return s;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public Account getAccount() {
+		return account;
 	}
 
-	public ArrayList<Transaction> getTransitions() {
-		return transitions;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
-	public void setTransitions(ArrayList<Transaction> transitions) {
-		this.transitions = transitions;
-	}
 }
