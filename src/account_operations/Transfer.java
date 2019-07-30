@@ -35,7 +35,7 @@ public class Transfer extends Transaction {
 
 		profileTypes originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
-		boolean enoughFounds = Transaction.checkEnoughFounds(originBalance, value);
+		boolean enoughFounds = Account.checkEnoughFounds(originBalance, value);
 		boolean valueSmallerThanLimit = Transfer.valueSmallerThanLimit(value);
 
 		if (originProfileType == profileTypes.NORMAL) {
@@ -43,8 +43,8 @@ public class Transfer extends Transaction {
 				if (valueSmallerThanLimit) {
 					t.setFeeCharged(BusinessRules.getNormalTransferTax());
 					BigDecimal realValue = Transfer.applyFixedTax(value, t.getFeeCharged());
-					Transaction.subtractBalance(originAccount, realValue);
-					Transaction.addBalance(destinationAccount, realValue);
+					Account.subtractBalance(originAccount, realValue);
+					Account.addBalance(destinationAccount, realValue);
 					System.out.println(String.format(
 							"Transfer of %oR$ from account number %o to account number %o finished successfully.\nNew balance on origin account: %oR$.",
 							value.toString(), originAccount.getAccountNumber(), destinationAccount.getAccountNumber(),
@@ -59,8 +59,8 @@ public class Transfer extends Transaction {
 			if (enoughFounds) {
 				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getVipTransferTax()));
 				BigDecimal realValue = value.add(t.getFeeCharged());
-				Transaction.subtractBalance(originAccount, realValue);
-				Transaction.addBalance(destinationAccount, realValue);
+				Account.subtractBalance(originAccount, realValue);
+				Account.addBalance(destinationAccount, realValue);
 				System.out.println(String.format(
 						"Transfer of %oR$ from account number %o to account number %o finished successfully.\nNew balance on origin account: %oR$.",
 						value.toString(), originAccount.getAccountNumber(), destinationAccount.getAccountNumber(),
@@ -68,8 +68,8 @@ public class Transfer extends Transaction {
 			} else {
 				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getVipTransferTax()));
 				BigDecimal realValue = value.add(t.getFeeCharged());
-				Transaction.subtractBalance(originAccount, realValue);
-				Transaction.addBalance(destinationAccount, realValue);
+				Account.subtractBalance(originAccount, realValue);
+				Account.addBalance(destinationAccount, realValue);
 				System.out.println(String.format(
 						"Transfer of %oR$ from account number %o to account number %o finished successfully.\nNew balance on origin account: %oR$. You are beeing taxed, negative balance!",
 						value.toString(), originAccount.getAccountNumber(), destinationAccount.getAccountNumber(),

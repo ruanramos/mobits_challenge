@@ -27,7 +27,7 @@ public class Deposit extends Transaction {
 		Deposit d = new Deposit(date, time, value, description, destinationAccount);
 
 		try {
-			Transaction.addBalance(destinationAccount, value);
+			Account.addBalance(destinationAccount, value);
 			System.out.println(
 					String.format("Deposit of %oR$ to account number %o finished successfully.\nNew balance: %o",
 							value.toString(), destinationAccount.getAccountNumber(), destinationAccount.getBalance()));

@@ -29,11 +29,11 @@ public class Withdrawal extends Transaction {
 
 		profileTypes profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
-		boolean enoughFounds = Transaction.checkEnoughFounds(balance, value);
+		boolean enoughFounds = Account.checkEnoughFounds(balance, value);
 
 		if (profileType == profileTypes.NORMAL) {
 			if (enoughFounds) {
-				Transaction.subtractBalance(account, value);
+				Account.subtractBalance(account, value);
 				System.out.println(String.format(
 						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
 						value.toString(), account.getAccountNumber(), account.getBalance()));
@@ -43,12 +43,12 @@ public class Withdrawal extends Transaction {
 			}
 		} else if (profileType == profileTypes.VIP) {
 			if (enoughFounds) {
-				Transaction.subtractBalance(account, value);
+				Account.subtractBalance(account, value);
 				System.out.println(String.format(
 						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
 						value.toString(), account.getAccountNumber(), account.getBalance()));
 			} else {
-				Transaction.subtractBalance(account, value);
+				Account.subtractBalance(account, value);
 				System.out.println(String.format(
 						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$. You are beeing taxed, negative balance!",
 						value.toString(), account.getAccountNumber(), account.getBalance()));

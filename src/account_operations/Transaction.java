@@ -25,39 +25,6 @@ public abstract class Transaction {
 		this.description = description;
 	}
 
-	/**
-	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
-	 * value
-	 */
-	static boolean checkEnoughFounds(BigDecimal balance, BigDecimal value) {
-		int enoughFounds = balance.compareTo(value);
-		if (enoughFounds < 0)
-			return false;
-		return true;
-	}
-
-	// TODO treat errors better
-	static void subtractBalance(Account account, BigDecimal value) {
-		try {
-			BigDecimal newBalance = account.getBalance().subtract(value);
-			account.setBalance(newBalance);
-			System.out.println("Operation successfully completed. New balance: " + newBalance);
-		} catch (Exception e) {
-			System.out.println("Error: " + e);
-		}
-	}
-
-	// TODO treat errors better
-	static void addBalance(Account account, BigDecimal value) {
-		try {
-			BigDecimal newBalance = account.getBalance().add(value);
-			account.setBalance(newBalance);
-			System.out.println("Operation successfully completed. New balance: " + newBalance);
-		} catch (Exception e) {
-			System.out.println("Error: " + e);
-		}
-	}
-
 	static BigDecimal applyFixedTax(BigDecimal value, BigDecimal fixedTax) {
 		return value.add(fixedTax);
 	}

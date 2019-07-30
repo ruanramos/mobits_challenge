@@ -36,6 +36,39 @@ public class Account {
 	}
 
 	/**
+	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
+	 * value
+	 */
+	public static boolean checkEnoughFounds(BigDecimal balance, BigDecimal value) {
+		int enoughFounds = balance.compareTo(value);
+		if (enoughFounds < 0)
+			return false;
+		return true;
+	}
+
+	// TODO treat errors better
+	public static void subtractBalance(Account account, BigDecimal value) {
+		try {
+			BigDecimal newBalance = account.getBalance().subtract(value);
+			account.setBalance(newBalance);
+			System.out.println("Operation successfully completed. New balance: " + newBalance);
+		} catch (Exception e) {
+			System.out.println("Error: " + e);
+		}
+	}
+
+	// TODO treat errors better
+	public static void addBalance(Account account, BigDecimal value) {
+		try {
+			BigDecimal newBalance = account.getBalance().add(value);
+			account.setBalance(newBalance);
+			System.out.println("Operation successfully completed. New balance: " + newBalance);
+		} catch (Exception e) {
+			System.out.println("Error: " + e);
+		}
+	}
+	
+	/**
 	 * Getters and setters
 	 */
 	public BigDecimal getBalance() {
