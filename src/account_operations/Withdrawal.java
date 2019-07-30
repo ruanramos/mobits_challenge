@@ -34,6 +34,9 @@ public class Withdrawal extends Transaction {
 		if (profileType == profileTypes.NORMAL) {
 			if (enoughFounds) {
 				Transaction.subtractBalance(account, value);
+				System.out.println(String.format(
+						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
+						value.toString(), account.getAccountNumber(), account.getBalance()));
 			} else {
 				System.out.println(String.format("%s %o.",
 						"Error: Not enough balance for the operation on account number ", account.getAccountNumber()));
@@ -41,11 +44,19 @@ public class Withdrawal extends Transaction {
 		} else if (profileType == profileTypes.VIP) {
 			if (enoughFounds) {
 				Transaction.subtractBalance(account, value);
+				System.out.println(String.format(
+						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
+						value.toString(), account.getAccountNumber(), account.getBalance()));
 			} else {
-				BigDecimal currentBalance = account.getBalance();
-				while (currentBalance.compareTo(BigDecimal.ZERO) < 0) {
-					Transaction.waitAndApplyTax(account, BusinessRules.getTaxapplicationinterval(), currentBalance,
-							BusinessRules.getNegativebalancetax());
+				Transaction.subtractBalance(account, value);
+				System.out.println(String.format(
+						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$. You are beeing taxed, negative balance!",
+						value.toString(), account.getAccountNumber(), account.getBalance()));
+				BigDecimal currentBalance;
+				while (account.getBalance().compareTo(BigDecimal.ZERO) < 0) {
+					currentBalance = account.getBalance();
+					Transaction.waitAndApplyTax(account, BusinessRules.getTaxapplicationInterval(), currentBalance,
+							BusinessRules.getNegativebalanceTax());
 				}
 			}
 		}
