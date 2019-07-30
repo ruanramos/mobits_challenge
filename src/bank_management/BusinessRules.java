@@ -27,6 +27,35 @@ public class BusinessRules {
 	 */
 	private static final BigDecimal normalMaxTransferValue = new BigDecimal("1000");
 
+	public enum Error {
+		NO_FOUNDS(0, "Not enough found for operation"), LIMIT_EXCEEDED(1, "Limit for operation exceeded"),
+		UNEXPECTED_ERROR(2, "An unexpected "), ACCOUNT_NOT_FOUND(3, "Account number was not found"),
+		ACCOUNT_HOLDER_NOT_FOUND(4, "Account holder was not found"),
+		PROFILE_TYPE_NOT_FOUND(5, "Profile type was not found"),
+		UNAUTHORIZED(6, "You have no authorization to perform this action");
+
+		private final int code;
+		private final String description;
+
+		private Error(int code, String description) {
+			this.code = code;
+			this.description = description;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		@Override
+		public String toString() {
+			return code + ": " + description;
+		}
+	}
+
 	/**
 	 * Getters and Setters
 	 */

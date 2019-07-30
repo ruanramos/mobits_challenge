@@ -80,7 +80,6 @@ public class Transfer extends Transaction {
 					Transaction.waitAndApplyTax(originAccount, BusinessRules.getTaxapplicationInterval(),
 							currentBalance, BusinessRules.getNegativebalanceTax());
 				}
-
 			}
 		}
 		originAccount.transactions.add(t);
