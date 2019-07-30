@@ -41,10 +41,14 @@ public class Transfer extends Transaction {
 		if (originProfileType == profileTypes.NORMAL) {
 			if (enoughFounds) {
 				if (valueSmallerThanLimit) {
-					t.setFeeCharged(BusinessRules.getNormaltransfertax());
+					t.setFeeCharged(BusinessRules.getNormalTransferTax());
 					BigDecimal realValue = Transfer.applyFixedTax(value, t.getFeeCharged());
 					Transaction.subtractBalance(originAccount, realValue);
 					Transaction.addBalance(destinationAccount, realValue);
+					System.out.println(String.format(
+							"Transfer of %oR$ from account number %o to account number %o finished successfully.\nNew balance on origin account: %oR$.",
+							value.toString(), originAccount.getAccountNumber(), destinationAccount.getAccountNumber(),
+							originAccount.getBalance()));
 				} else {
 					System.out.println("Error: Limit for transfer exceeded");
 				}
@@ -53,12 +57,30 @@ public class Transfer extends Transaction {
 			}
 		} else if (originProfileType == profileTypes.VIP) {
 			if (enoughFounds) {
-				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getViptransfertax()));
+				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getVipTransferTax()));
 				BigDecimal realValue = value.add(t.getFeeCharged());
 				Transaction.subtractBalance(originAccount, realValue);
 				Transaction.addBalance(destinationAccount, realValue);
+				System.out.println(String.format(
+						"Transfer of %oR$ from account number %o to account number %o finished successfully.\nNew balance on origin account: %oR$.",
+						value.toString(), originAccount.getAccountNumber(), destinationAccount.getAccountNumber(),
+						originAccount.getBalance()));
 			} else {
-				System.out.println("Error: not enough founds for the transaction");
+				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getVipTransferTax()));
+				BigDecimal realValue = value.add(t.getFeeCharged());
+				Transaction.subtractBalance(originAccount, realValue);
+				Transaction.addBalance(destinationAccount, realValue);
+				System.out.println(String.format(
+						"Transfer of %oR$ from account number %o to account number %o finished successfully.\nNew balance on origin account: %oR$. You are beeing taxed, negative balance!",
+						value.toString(), originAccount.getAccountNumber(), destinationAccount.getAccountNumber(),
+						originAccount.getBalance()));
+				BigDecimal currentBalance;
+				while (originAccount.getBalance().compareTo(BigDecimal.ZERO) < 0) {
+					currentBalance = originAccount.getBalance();
+					Transaction.waitAndApplyTax(originAccount, BusinessRules.getTaxapplicationInterval(),
+							currentBalance, BusinessRules.getNegativebalanceTax());
+				}
+
 			}
 		}
 		originAccount.transactions.add(t);
@@ -67,7 +89,7 @@ public class Transfer extends Transaction {
 	}
 
 	private static boolean valueSmallerThanLimit(BigDecimal value) {
-		return (value.compareTo(BusinessRules.getNormalMaxtransfervalue()) < 0);
+		return (value.compareTo(BusinessRules.getNormalMaxTransferValue()) < 0);
 	}
 
 	/**
