@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import account.Account;
+import account.AccountsManager;
 import bank_management.BusinessRules.profileTypes;
 import bank_management.BusinessRules;
 
@@ -66,6 +67,14 @@ public class Withdrawal extends Transaction {
 		Withdrawal w = new Withdrawal(date, time, value, description, account);
 		w.getAccount().transactions.add(w);
 		return w;
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"Transaction Type: Withdrawal\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nAccount number: %o\nBalance Before: %o\nNew Balance: %o\n",
+				getDate(), getTime(), getValue(), getDescription(), getAccount().getAccountNumber(),
+				getAccount().getBalance(), getAccount().getBalance().subtract(getValue()));
 	}
 
 	/**
