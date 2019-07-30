@@ -48,6 +48,9 @@ public class Withdrawal extends Transaction {
 						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
 						value.toString(), account.getAccountNumber(), account.getBalance()));
 			} else {
+				/**
+				 * Negative balance treatment for VIP account holder
+				 */
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
 						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$. You are beeing taxed, negative balance!",
@@ -61,7 +64,7 @@ public class Withdrawal extends Transaction {
 			}
 		}
 		Withdrawal w = new Withdrawal(date, time, value, description, account);
-		account.transactions.add(w);
+		w.getAccount().transactions.add(w);
 		return w;
 	}
 

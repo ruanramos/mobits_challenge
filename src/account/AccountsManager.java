@@ -13,7 +13,7 @@ public class AccountsManager {
 	static ArrayList<AccountHolder> existingAccountHolders;
 
 	static AccountHolder createAccountHolder(profileTypes profileType) {
-		String password = generateSimplePassword(BusinessRules.getLenpassword());
+		String password = generateSimplePassword(BusinessRules.getLenPassword());
 		AccountHolder accHolder = new AccountHolder(profileType, password);
 		existingAccountHolders.add(accHolder);
 		return accHolder;
@@ -23,7 +23,7 @@ public class AccountsManager {
 	 * initial balance = 0
 	 */
 	static Account createAccount(AccountHolder accountHolder) {
-		long accountNumber = generateAccountNumber(BusinessRules.getLenaccountnumber());
+		long accountNumber = generateAccountNumber(BusinessRules.getLenAccountnumber());
 		Account acc = new Account(accountNumber, accountHolder);
 		existingAccounts.add(acc);
 		return acc;
@@ -33,7 +33,7 @@ public class AccountsManager {
 	 * given initial balance
 	 */
 	static Account createAccount(BigDecimal startingBalance, AccountHolder accountHolder) {
-		long accountNumber = generateAccountNumber(BusinessRules.getLenaccountnumber());
+		long accountNumber = generateAccountNumber(BusinessRules.getLenAccountnumber());
 		Account acc = new Account(accountNumber, accountHolder, startingBalance);
 		existingAccounts.add(acc);
 		return acc;
@@ -73,7 +73,7 @@ public class AccountsManager {
 	/**
 	 * Getters and setters
 	 */
-	
+
 	/**
 	 * Kind of a getter, so that, even with existingAccounts being public, other
 	 * classes can't access it directly, only get a copy

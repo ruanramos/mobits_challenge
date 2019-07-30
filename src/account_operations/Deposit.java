@@ -35,7 +35,15 @@ public class Deposit extends Transaction {
 			System.out.println(String.format("Error: Could not complete the deposit"));
 		}
 
-		d.destinationAccount.transactions.add(d);
+		d.getDestinationAccount().transactions.add(d);
 		return d;
+	}
+
+	public Account getDestinationAccount() {
+		return destinationAccount;
+	}
+
+	public void setDestinationAccount(Account destinationAccount) {
+		this.destinationAccount = destinationAccount;
 	}
 }

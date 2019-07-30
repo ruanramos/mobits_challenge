@@ -66,6 +66,9 @@ public class Transfer extends Transaction {
 						value.toString(), originAccount.getAccountNumber(), destinationAccount.getAccountNumber(),
 						originAccount.getBalance()));
 			} else {
+				/**
+				 * Negative balance treatment for VIP account holder
+				 */
 				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getVipTransferTax()));
 				BigDecimal realValue = value.add(t.getFeeCharged());
 				Account.subtractBalance(originAccount, realValue);
@@ -82,8 +85,8 @@ public class Transfer extends Transaction {
 				}
 			}
 		}
-		originAccount.transactions.add(t);
-		destinationAccount.transactions.add(t);
+		t.getOriginAccount().transactions.add(t);
+		t.getDestinationAccount().transactions.add(t);
 		return t;
 	}
 

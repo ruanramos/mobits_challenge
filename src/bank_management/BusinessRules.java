@@ -21,6 +21,7 @@ public class BusinessRules {
 	private static final int taxApplicationInterval = 1;
 	private static final BigDecimal normalTransferTax = new BigDecimal("8");
 	private static final BigDecimal VipTransferTax = new BigDecimal("0.008");
+	private static final BigDecimal CallManagerTax = new BigDecimal("50");
 
 	/**
 	 * Transaction related
@@ -85,6 +86,10 @@ public class BusinessRules {
 
 	public static int getTaxapplicationInterval() {
 		return taxApplicationInterval;
+	}
+
+	public static BigDecimal getCallmanagertax() {
+		return CallManagerTax;
 	}
 
 }
