@@ -26,7 +26,6 @@ public class Withdrawal extends Transaction {
 	// TODO treat errors better
 	static Withdrawal makeWithdrawal(LocalDate date, LocalTime time, BigDecimal value, String description,
 			Account account) {
-		Withdrawal w = new Withdrawal(date, time, value, description, account);
 
 		profileTypes profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
@@ -50,6 +49,7 @@ public class Withdrawal extends Transaction {
 				}
 			}
 		}
+		Withdrawal w = new Withdrawal(date, time, value, description, account);
 		account.transactions.add(w);
 		return w;
 	}

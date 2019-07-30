@@ -65,7 +65,7 @@ public abstract class Transaction {
 	static BigDecimal calculatePercentageFee(BigDecimal value, BigDecimal percentageTax) {
 		return value.multiply(percentageTax);
 	}
-	
+
 	static BigDecimal applyPercentageTax(BigDecimal value, BigDecimal percentageTax) {
 		BigDecimal multiplier = BigDecimal.ONE.add(percentageTax);
 		return value.multiply(multiplier);

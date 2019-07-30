@@ -9,6 +9,7 @@ public class BusinessRules {
 	 */
 	private static final int lenAccountNumber = 8;
 	private static final int lenPassword = 6;
+
 	public static enum profileTypes {
 		NORMAL, VIP;
 	}
@@ -26,7 +27,6 @@ public class BusinessRules {
 	 */
 	private static final BigDecimal normalMaxTransferValue = new BigDecimal("1000");
 
-	
 	/**
 	 * Getters and Setters
 	 */

@@ -18,7 +18,7 @@ public class Transfer extends Transaction {
 
 	/**
 	 * Used a private constructor, instantiating the class with the static method
-	 * makeWithdrawal() for encapsulation
+	 * makeTransfer() for encapsulation
 	 */
 	private Transfer(LocalDate date, LocalTime time, BigDecimal value, String description, Account originAccount,
 			Account destinationAccount) {
@@ -30,12 +30,13 @@ public class Transfer extends Transaction {
 	// TODO treat errors better
 	static Transfer makeTransfer(LocalDate date, LocalTime time, BigDecimal value, String description,
 			Account originAccount, Account destinationAccount) {
+
 		Transfer t = new Transfer(date, time, value, description, originAccount, destinationAccount);
 
 		profileTypes originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
 		boolean enoughFounds = Transaction.checkEnoughFounds(originBalance, value);
-		boolean valueSmallerThanLimit = t.valueSmallerThanLimit(value);
+		boolean valueSmallerThanLimit = Transfer.valueSmallerThanLimit(value);
 
 		if (originProfileType == profileTypes.NORMAL) {
 			if (enoughFounds) {
@@ -65,16 +66,19 @@ public class Transfer extends Transaction {
 		return t;
 	}
 
+	private static boolean valueSmallerThanLimit(BigDecimal value) {
+		return (value.compareTo(BusinessRules.getNormalMaxtransfervalue()) < 0);
+	}
+
+	/**
+	 * Getters and Setters
+	 */
 	public BigDecimal getFeeCharged() {
 		return feeCharged;
 	}
 
 	public void setFeeCharged(BigDecimal feeCharged) {
 		this.feeCharged = feeCharged;
-	}
-
-	private boolean valueSmallerThanLimit(BigDecimal value) {
-		return (value.compareTo(BusinessRules.getNormalMaxtransfervalue()) < 0);
 	}
 
 	public Account getDestinationAccount() {
