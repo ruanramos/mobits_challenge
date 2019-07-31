@@ -33,7 +33,8 @@ public class BusinessRules {
 		UNEXPECTED_ERROR(2, "An unexpected "), ACCOUNT_NOT_FOUND(3, "Account number was not fund"),
 		ACCOUNT_HOLDER_NOT_FOUND(4, "Account holder was not fund"),
 		PROFILE_TYPE_NOT_FOUND(5, "Profile type was not fund"),
-		UNAUTHORIZED(6, "You have no authorization to perform this action");
+		UNAUTHORIZED(6, "You have no authorization to perform this action"),
+		INSERTION_ERROR(7, "Couldnt insert data on the db");
 
 		private final int code;
 		private final String description;
