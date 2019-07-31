@@ -29,10 +29,10 @@ public class BusinessRules {
 	private static final BigDecimal normalMaxTransferValue = new BigDecimal("1000");
 
 	public enum Error {
-		NO_FOUNDS(0, "Not enough found for operation"), LIMIT_EXCEEDED(1, "Limit for operation exceeded"),
-		UNEXPECTED_ERROR(2, "An unexpected "), ACCOUNT_NOT_FOUND(3, "Account number was not found"),
-		ACCOUNT_HOLDER_NOT_FOUND(4, "Account holder was not found"),
-		PROFILE_TYPE_NOT_FOUND(5, "Profile type was not found"),
+		NO_FOUNDS(0, "Not enough fund for operation"), LIMIT_EXCEEDED(1, "Limit for operation exceeded"),
+		UNEXPECTED_ERROR(2, "An unexpected "), ACCOUNT_NOT_FOUND(3, "Account number was not fund"),
+		ACCOUNT_HOLDER_NOT_FOUND(4, "Account holder was not fund"),
+		PROFILE_TYPE_NOT_FOUND(5, "Profile type was not fund"),
 		UNAUTHORIZED(6, "You have no authorization to perform this action");
 
 		private final int code;

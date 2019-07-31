@@ -16,7 +16,8 @@ public class Withdrawal extends Transaction {
 
 	/**
 	 * Used a private constructor, instantiating the class with the static method
-	 * makeWithdrawal() for encapsulation
+	 * makeWithdrawal() because the class will only be instantiated when the
+	 * operation is completed,
 	 */
 	private Withdrawal(LocalDate date, LocalTime time, BigDecimal value, String description, Account account) {
 		super(date, time, value, description);
@@ -29,10 +30,10 @@ public class Withdrawal extends Transaction {
 
 		profileTypes profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
-		boolean enoughFounds = Account.checkEnoughFounds(balance, value);
+		boolean enoughFunds = Account.checkEnoughFunds(balance, value);
 
 		if (profileType == profileTypes.NORMAL) {
-			if (enoughFounds) {
+			if (enoughFunds) {
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
 						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
@@ -42,7 +43,7 @@ public class Withdrawal extends Transaction {
 						"Error: Not enough balance for the operation on account number ", account.getAccountNumber()));
 			}
 		} else if (profileType == profileTypes.VIP) {
-			if (enoughFounds) {
+			if (enoughFunds) {
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
 						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",

@@ -35,11 +35,11 @@ public class Transfer extends Transaction {
 
 		profileTypes originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
-		boolean enoughFounds = Account.checkEnoughFounds(originBalance, value);
+		boolean enoughFunds = Account.checkEnoughFunds(originBalance, value);
 		boolean valueSmallerThanLimit = Transfer.valueSmallerThanLimit(value);
 
 		if (originProfileType == profileTypes.NORMAL) {
-			if (enoughFounds) {
+			if (enoughFunds) {
 				if (valueSmallerThanLimit) {
 					t.setFeeCharged(BusinessRules.getNormalTransferTax());
 					BigDecimal realValue = Transfer.applyFixedTax(value, t.getFeeCharged());
@@ -53,10 +53,10 @@ public class Transfer extends Transaction {
 					System.out.println("Error: Limit for transfer exceeded");
 				}
 			} else {
-				System.out.println("Error: not enough founds for the transaction");
+				System.out.println("Error: not enough funds for the transaction");
 			}
 		} else if (originProfileType == profileTypes.VIP) {
-			if (enoughFounds) {
+			if (enoughFunds) {
 				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getVipTransferTax()));
 				BigDecimal realValue = value.add(t.getFeeCharged());
 				Account.subtractBalance(originAccount, realValue);

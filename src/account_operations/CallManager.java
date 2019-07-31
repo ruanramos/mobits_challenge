@@ -34,13 +34,13 @@ public class CallManager extends Transaction {
 		profileTypes profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
 		BigDecimal managerTax = BusinessRules.getCallmanagertax();
-		boolean enoughFounds = Account.checkEnoughFounds(balance, managerTax);
+		boolean enoughFunds = Account.checkEnoughFunds(balance, managerTax);
 
 		if (profileType == profileTypes.NORMAL) {
 			System.out.println(BusinessRules.Error.UNAUTHORIZED.toString());
 		} else if (profileType == profileTypes.VIP) {
 			// TODO ask for confirmation
-			if (enoughFounds) {
+			if (enoughFunds) {
 				Account.subtractBalance(account, managerTax);
 				System.out.println(
 						String.format("Manager called. %oR$ debited from account number %o.\nNew balance: %oR$.",
