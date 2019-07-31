@@ -117,8 +117,7 @@ public class AccountsManager {
 	 */
 
 	/**
-	 * Kind of a getter, so that, even with existingAccounts being public, other
-	 * classes can't access it directly, only get a copy
+	 * It's a getter, but querying from bd
 	 */
 	public ArrayList<Account> listExistingAccounts() {
 		AccountStorage accStorage = new AccountStorage();
@@ -126,8 +125,7 @@ public class AccountsManager {
 	}
 
 	/**
-	 * Kind of a getter, so that, even with existingAccountHolders being public,
-	 * other classes can't access it directly, only get a copy
+	 * It's a getter, but querying from bd
 	 */
 	public ArrayList<AccountHolder> listExistingAccountHolders() {
 		AccountHolderStorage accHoldersStorage = new AccountHolderStorage();
