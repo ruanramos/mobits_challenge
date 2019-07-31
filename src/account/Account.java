@@ -68,7 +68,7 @@ public class Account {
 			System.out.println("Error: " + e);
 		}
 	}
-	
+
 	/**
 	 * Getters and setters
 	 */
