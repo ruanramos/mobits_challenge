@@ -57,6 +57,42 @@ public class BusinessRules {
 		}
 	}
 
+	public enum TransactionTypes {
+		WITHDRAWAL(0), DEPOSIT(1), TRANSFER(2), CALL_MANAGER(3);
+
+		private final int code;
+
+		private TransactionTypes(int code) {
+			this.code = code;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		@Override
+		public String toString() {
+			String res = "";
+			switch (code) {
+			case 0:
+				res = "Withdrawal";
+				break;
+			case 1:
+				res = "Deposit";
+				break;
+			case 2:
+				res = "Transfer";
+				break;
+			case 3:
+				res = "Call Manager";
+				break;
+			default:
+				return Error.UNEXPECTED_ERROR.toString();
+			}
+			return res;
+		}
+	}
+
 	/**
 	 * Getters and Setters
 	 */
