@@ -32,12 +32,12 @@ public class Transfer extends Transaction {
 
 		Transfer t = new Transfer(time, value, description, originAccount, destinationAccount);
 
-		profileTypes originProfileType = originAccount.getAccountHolder().getProfileType();
+		int originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
 		boolean enoughFunds = Account.checkEnoughFunds(originBalance, value);
 		boolean valueSmallerThanLimit = Transfer.valueSmallerThanLimit(value);
 
-		if (originProfileType == profileTypes.NORMAL) {
+		if (originProfileType == profileTypes.NORMAL.ordinal()) {
 			if (enoughFunds) {
 				if (valueSmallerThanLimit) {
 					t.setFeeCharged(BusinessRules.getNormalTransferTax());
@@ -54,7 +54,7 @@ public class Transfer extends Transaction {
 			} else {
 				System.out.println("Error: not enough funds for the transaction");
 			}
-		} else if (originProfileType == profileTypes.VIP) {
+		} else if (originProfileType == profileTypes.VIP.ordinal()) {
 			if (enoughFunds) {
 				t.setFeeCharged(Transfer.calculatePercentageFee(value, BusinessRules.getVipTransferTax()));
 				BigDecimal realValue = value.add(t.getFeeCharged());

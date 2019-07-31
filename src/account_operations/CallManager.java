@@ -29,14 +29,14 @@ public class CallManager extends Transaction {
 	// TODO treat errors better
 	static CallManager makeManagerCall(LocalDateTime time, BigDecimal value, String description, Account account) {
 
-		profileTypes profileType = account.getAccountHolder().getProfileType();
+		int profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
 		BigDecimal managerTax = BusinessRules.getCallmanagertax();
 		boolean enoughFunds = Account.checkEnoughFunds(balance, managerTax);
 
-		if (profileType == profileTypes.NORMAL) {
+		if (profileType == profileTypes.NORMAL.ordinal()) {
 			System.out.println(BusinessRules.Error.UNAUTHORIZED.toString());
-		} else if (profileType == profileTypes.VIP) {
+		} else if (profileType == profileTypes.VIP.ordinal()) {
 			// TODO ask for confirmation
 			if (enoughFunds) {
 				Account.subtractBalance(account, managerTax);

@@ -26,11 +26,11 @@ public class Withdrawal extends Transaction {
 	// TODO treat errors better
 	static Withdrawal makeWithdrawal(LocalDateTime time, BigDecimal value, String description, Account account) {
 
-		profileTypes profileType = account.getAccountHolder().getProfileType();
+		int profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
 		boolean enoughFunds = Account.checkEnoughFunds(balance, value);
 
-		if (profileType == profileTypes.NORMAL) {
+		if (profileType == profileTypes.NORMAL.ordinal()) {
 			if (enoughFunds) {
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
@@ -40,7 +40,7 @@ public class Withdrawal extends Transaction {
 				System.out.println(String.format("%s %o.",
 						"Error: Not enough balance for the operation on account number ", account.getAccountNumber()));
 			}
-		} else if (profileType == profileTypes.VIP) {
+		} else if (profileType == profileTypes.VIP.ordinal()) {
 			if (enoughFunds) {
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
