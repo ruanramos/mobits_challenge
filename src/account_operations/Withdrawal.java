@@ -6,26 +6,30 @@ import java.time.LocalDateTime;
 import account.Account;
 import bank_management.BusinessRules;
 import bank_management.BusinessRules.profileTypes;
+import database.AccountStorage;
 
 public class Withdrawal extends Transaction {
 
 	// TODO treat concurrency problems
 
-	private Account account;
+	private long accountNumber;
 
-	/**
-	 * Used a private constructor, instantiating the class with the static method
-	 * makeWithdrawal() because the class will only be instantiated when the
-	 * operation is completed,
-	 */
-	private Withdrawal(LocalDateTime time, BigDecimal value, String description, Account account) {
-		super(time, value, description);
-		this.account = account;
+	public Withdrawal(int id, LocalDateTime time, BigDecimal value, String description, long accountNumber) {
+		super(id, time, value, description);
+		this.type = BusinessRules.TransactionTypes.WITHDRAWAL.ordinal();
+		this.setAccountNumber(accountNumber);
 	}
 
+	/**
+	 * Used the static method makeWithdrawal() because the class will only be
+	 * instantiated when the operation is completed,
+	 */
 	// TODO treat errors better
-	static Withdrawal makeWithdrawal(LocalDateTime time, BigDecimal value, String description, Account account) {
+	static Withdrawal makeWithdrawal(int id, LocalDateTime time, BigDecimal value, String description,
+			long accountNumber) {
+		Withdrawal w = new Withdrawal(id, time, value, description, accountNumber);
 
+		Account account = w.getAccount();
 		int profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
 		boolean enoughFunds = Account.checkEnoughFunds(balance, value);
@@ -62,7 +66,7 @@ public class Withdrawal extends Transaction {
 				}
 			}
 		}
-		Withdrawal w = new Withdrawal(time, value, description, account);
+
 		w.getAccount().transactions.add(w);
 		return w;
 	}
@@ -83,10 +87,15 @@ public class Withdrawal extends Transaction {
 	 * Getters and setters
 	 */
 	public Account getAccount() {
-		return account;
+		AccountStorage accStorage = new AccountStorage();
+		return accStorage.selectAccount(getAccountNumber());
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public long getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(long accountNumber) {
+		this.accountNumber = accountNumber;
 	}
 }

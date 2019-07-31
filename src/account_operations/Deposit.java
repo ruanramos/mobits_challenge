@@ -4,25 +4,30 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import account.Account;
+import bank_management.BusinessRules;
+import database.AccountStorage;
 
 public class Deposit extends Transaction {
 
 	// TODO treat concurrency problems
 
-	private Account destinationAccount;
+	private long destinationAccountNumber;
 
-	/**
-	 * Used a private constructor, instantiating the class with the static method
-	 * makeDeposit() for encapsulation
-	 */
-	private Deposit(LocalDateTime time, BigDecimal value, String description, Account destinationAccount) {
-		super(time, value, description);
-		this.destinationAccount = destinationAccount;
+	public Deposit(int id, LocalDateTime time, BigDecimal value, String description, long destinationAccountNumber) {
+		super(id, time, value, description);
+		this.type = BusinessRules.TransactionTypes.DEPOSIT.ordinal();
+		this.setDestinationAccountNumber(destinationAccountNumber);
 	}
 
+	/**
+	 * Used the static method makeDeposit() because the class will only be
+	 * instantiated when the operation is completed,
+	 */
 	// TODO treat errors better
-	static Deposit makeDeposit(LocalDateTime time, BigDecimal value, String description, Account destinationAccount) {
-		Deposit d = new Deposit(time, value, description, destinationAccount);
+	static Deposit makeDeposit(int id, LocalDateTime time, BigDecimal value, String description,
+			long destinationAccountNumber) {
+		Deposit d = new Deposit(id, time, value, description, destinationAccountNumber);
+		Account destinationAccount = d.getDestinationAccount();
 
 		try {
 			Account.addBalance(destinationAccount, value);
@@ -52,11 +57,17 @@ public class Deposit extends Transaction {
 	/**
 	 * Getters and Setters
 	 */
+
 	public Account getDestinationAccount() {
-		return destinationAccount;
+		AccountStorage accStorage = new AccountStorage();
+		return accStorage.selectAccount(getDestinationAccountNumber());
 	}
 
-	public void setDestinationAccount(Account destinationAccount) {
-		this.destinationAccount = destinationAccount;
+	public long getDestinationAccountNumber() {
+		return destinationAccountNumber;
+	}
+
+	public void setDestinationAccountNumber(long destinationAccountNumber) {
+		this.destinationAccountNumber = destinationAccountNumber;
 	}
 }

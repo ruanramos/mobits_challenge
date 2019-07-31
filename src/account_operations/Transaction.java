@@ -15,8 +15,11 @@ public abstract class Transaction {
 	private LocalDateTime time;
 	private BigDecimal value;
 	private String description;
+	protected int type;
+	private int id;
 
-	public Transaction(LocalDateTime time, BigDecimal value, String description) {
+	public Transaction(int id, LocalDateTime time, BigDecimal value, String description) {
+		this.id = id;
 		this.time = time;
 		this.value = value;
 		this.description = description;
@@ -76,5 +79,21 @@ public abstract class Transaction {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

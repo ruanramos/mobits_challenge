@@ -6,31 +6,36 @@ import java.time.LocalDateTime;
 import account.Account;
 import bank_management.BusinessRules;
 import bank_management.BusinessRules.profileTypes;
+import database.AccountStorage;
 
 public class Transfer extends Transaction {
 
 	// TODO treat concurrency problems
 
-	private Account originAccount;
-	private Account destinationAccount;
+	private long originAccountNumber;
+	private long destinationAccountNumber;
 	private BigDecimal feeCharged;
 
-	/**
-	 * Used a private constructor, instantiating the class with the static method
-	 * makeTransfer() for encapsulation
-	 */
-	private Transfer(LocalDateTime time, BigDecimal value, String description, Account originAccount,
-			Account destinationAccount) {
-		super(time, value, description);
-		this.originAccount = originAccount;
-		this.destinationAccount = destinationAccount;
+	public Transfer(int id, LocalDateTime time, BigDecimal value, String description, long originAccountNumber,
+			long destinationAccountNumber) {
+		super(id, time, value, description);
+		this.type = BusinessRules.TransactionTypes.TRANSFER.ordinal();
+		this.originAccountNumber = originAccountNumber;
+		this.destinationAccountNumber = destinationAccountNumber;
 	}
 
+	/**
+	 * Used the static method makeTransfer() because the class will only be
+	 * instantiated when the operation is completed,
+	 */
 	// TODO treat errors better
-	static Transfer makeTransfer(LocalDateTime time, BigDecimal value, String description, Account originAccount,
-			Account destinationAccount) {
+	static Transfer makeTransfer(int id, LocalDateTime time, BigDecimal value, String description,
+			long originAccountNumber, long destinationAccountNumber) {
 
-		Transfer t = new Transfer(time, value, description, originAccount, destinationAccount);
+		Transfer t = new Transfer(id, time, value, description, originAccountNumber, destinationAccountNumber);
+
+		Account destinationAccount = t.getDestinationAccount();
+		Account originAccount = t.getOriginAccount();
 
 		int originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
@@ -111,6 +116,22 @@ public class Transfer extends Transaction {
 	/**
 	 * Getters and Setters
 	 */
+	public long getOriginAccountNumber() {
+		return originAccountNumber;
+	}
+
+	public void setOriginAccountNumber(long originAccountNumber) {
+		this.originAccountNumber = originAccountNumber;
+	}
+
+	public long getDestinationAccountNumber() {
+		return destinationAccountNumber;
+	}
+
+	public void setDestinationAccountNumber(long destinationAccountNumber) {
+		this.destinationAccountNumber = destinationAccountNumber;
+	}
+
 	public BigDecimal getFeeCharged() {
 		return feeCharged;
 	}
@@ -120,18 +141,12 @@ public class Transfer extends Transaction {
 	}
 
 	public Account getDestinationAccount() {
-		return destinationAccount;
-	}
-
-	public void setDestinationAccount(Account destinationAccount) {
-		this.destinationAccount = destinationAccount;
+		AccountStorage accStorage = new AccountStorage();
+		return accStorage.selectAccount(getDestinationAccountNumber());
 	}
 
 	public Account getOriginAccount() {
-		return originAccount;
-	}
-
-	public void setOriginAccount(Account originAccount) {
-		this.originAccount = originAccount;
+		AccountStorage accStorage = new AccountStorage();
+		return accStorage.selectAccount(getOriginAccountNumber());
 	}
 }
