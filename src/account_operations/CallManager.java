@@ -80,8 +80,6 @@ public class CallManager extends Transaction {
 
 	/**
 	 * Getters and Setters
-	 * 
-	 * @return
 	 */
 
 	public Account getAccount() {
