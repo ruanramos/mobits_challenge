@@ -75,7 +75,7 @@ public class Withdrawal extends Transaction {
 		BigDecimal balance = account.getBalance();
 
 		return String.format(
-				"Transaction Type: Withdrawal\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nAccount number: %o\nBalance: %o - %o = %o\n",
+				"Transaction Type: Withdrawal\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nBalance: %oR$ - %oR$ = %oR$\n",
 				getDate(), getTime(), value, getDescription(), account.getAccountNumber(), balance, value,
 				balance.subtract(value));
 	}

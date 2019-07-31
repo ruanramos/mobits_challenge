@@ -103,7 +103,7 @@ public class Transfer extends Transaction {
 		BigDecimal destBalance = destAccount.getBalance();
 
 		return String.format(
-				"Transaction Type: Transfer\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nOrigin Account number: %o\nDestination Account number: %o\nOrigin Account Balance: %o - %o = %o\nDestination Account Balance: %o + %o = %o\n",
+				"Transaction Type: Transfer\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nOrigin Account number: %o\nDestination Account number: %o\nOrigin Account Balance: %oR$ - %oR$ = %oR$\nDestination Account Balance: %oR$ + %oR$ = %oR$\n",
 				getDate(), getTime(), value, getDescription(), origAccount.getAccountNumber(),
 				destAccount.getAccountNumber(), origBalance, value, origBalance.subtract(value), destBalance, value,
 				destBalance.add(value));

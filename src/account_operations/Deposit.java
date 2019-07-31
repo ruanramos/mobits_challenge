@@ -46,7 +46,7 @@ public class Deposit extends Transaction {
 		BigDecimal destBalance = destAccount.getBalance();
 
 		return String.format(
-				"Transaction Type: Deposit\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nAccount number: %o\nAccount Balance: %o + %o = %o\n",
+				"Transaction Type: Deposit\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nAccount Balance: %oR$ + %oR$ = %oR$\n",
 				getDate(), getTime(), value, getDescription(), destAccount.getAccountNumber(), destBalance, value,
 				destBalance.add(value));
 	}
