@@ -60,7 +60,7 @@ public class AccountsManager {
 		Account acc = new Account(accountNumber, accountHolder.getId(), startingBalance);
 
 		/**
-		 * insertion on bd
+		 * insertion on db
 		 */
 		AccountStorage accStorage = new AccountStorage();
 		accStorage.insertAccount(accountNumber, startingBalance, accountHolder.getId());
@@ -73,7 +73,7 @@ public class AccountsManager {
 		Account acc = new Account(accountNumber, accountHolderId, startingBalance);
 
 		/**
-		 * insertion on bd
+		 * insertion on db
 		 */
 		AccountStorage accStorage = new AccountStorage();
 		accStorage.insertAccount(accountNumber, startingBalance, accountHolderId);
@@ -117,7 +117,7 @@ public class AccountsManager {
 	 */
 
 	/**
-	 * It's a getter, but querying from bd
+	 * It's a getter, but querying from db
 	 */
 	public ArrayList<Account> listExistingAccounts() {
 		AccountStorage accStorage = new AccountStorage();
@@ -125,7 +125,7 @@ public class AccountsManager {
 	}
 
 	/**
-	 * It's a getter, but querying from bd
+	 * It's a getter, but querying from db
 	 */
 	public ArrayList<AccountHolder> listExistingAccountHolders() {
 		AccountHolderStorage accHoldersStorage = new AccountHolderStorage();
