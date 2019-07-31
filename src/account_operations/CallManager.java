@@ -10,6 +10,10 @@ import bank_management.BusinessRules.profileTypes;
 
 public class CallManager extends Transaction {
 
+	/**
+	 * Since the Call Manager operation simply removes 50R$ from the account, it's
+	 * been treated as a normal transaction, showing on the Account Statement, etc
+	 */
 	// TODO treat concurrency problems
 
 	private Account account;
@@ -61,6 +65,24 @@ public class CallManager extends Transaction {
 		cm.getAccount().transactions.add(cm);
 		return cm;
 	}
+
+	@Override
+	public String toString() {
+		BigDecimal value = getValue();
+		Account account = getAccount();
+		BigDecimal balance = account.getBalance();
+
+		return String.format(
+				"Transaction Type: Call Manager\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nBalance: %oR$ - %oR$ = %oR$\n",
+				getDate(), getTime(), value, getDescription(), account.getAccountNumber(), balance, value,
+				balance.subtract(value));
+	}
+
+	/**
+	 * Getters and Setters
+	 * 
+	 * @return
+	 */
 
 	public Account getAccount() {
 		return account;
