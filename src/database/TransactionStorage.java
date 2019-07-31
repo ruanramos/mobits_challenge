@@ -3,9 +3,17 @@ package database;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
+import account_operations.CallManager;
+import account_operations.Deposit;
+import account_operations.Transaction;
+import account_operations.Transfer;
+import account_operations.Withdrawal;
 import bank_management.BusinessRules;
 
 public class TransactionStorage {
@@ -37,6 +45,77 @@ public class TransactionStorage {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public long[] selectAccountsInvolvedInTransaction(int transactionId) {
+		String sql = "SELECT account_number " + "FROM Transactions WHERE id = ?";
+		long[] accountNumbers = { (long) 0, (long) 0 }; // default initialization
+		int index = 0;
+
+		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setLong(1, transactionId);
+			ResultSet rs = pstmt.executeQuery();
+
+			// loop through the result set
+			while (rs.next()) {
+				accountNumbers[index] = rs.getLong("account_number");
+				index++;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return accountNumbers;
+	}
+
+	public ArrayList<Transaction> selectTransactionsFromAccount(long accountNumber) {
+		String sql = "SELECT * " + "FROM Transactions WHERE account_number = ?";
+		ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+
+		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setLong(1, accountNumber);
+			ResultSet rs = pstmt.executeQuery();
+
+			// loop through the result set
+			while (rs.next()) {
+				int transactionType = rs.getInt("type");
+				String time = rs.getString("time");
+				long accountNumber1 = rs.getLong("account_number");
+				int transactionId = rs.getInt("id");
+				BigDecimal value = rs.getBigDecimal("value");
+				String description = rs.getString("description");
+
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
+				LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
+
+				switch (transactionType) {
+				case 0:
+					Withdrawal w = new Withdrawal(transactionId, dateTime, value, description, accountNumber1);
+					transactions.add(w);
+					break;
+				case 1:
+					Deposit d = new Deposit(transactionId, dateTime, value, description, accountNumber1);
+					transactions.add(d);
+					break;
+				case 2:
+					long[] accounts = selectAccountsInvolvedInTransaction(transactionId);
+					// TODO make sure origin account gets queried before destination account
+					Transfer t = new Transfer(transactionId, dateTime, value, description, accounts[0], accounts[1]);
+					transactions.add(t);
+					break;
+				case 3:
+					CallManager cm = new CallManager(rs.getInt("id"), dateTime, value, description, accountNumber1);
+					transactions.add(cm);
+					break;
+				default:
+					break;
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return transactions;
 	}
 
 	public static void main(String[] args) {
