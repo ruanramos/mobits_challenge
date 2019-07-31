@@ -6,19 +6,22 @@ import java.util.Random;
 
 import bank_management.BusinessRules;
 import bank_management.BusinessRules.profileTypes;
+import database.AccountHolderStorage;
+import database.AccountStorage;
 
 public class AccountsManager {
 
-	private static int holder_id = 0;
-	static ArrayList<Account> existingAccounts;
-	static ArrayList<AccountHolder> existingAccountHolders;
+	private static int incrementalHolderId = 0;
 
 	static AccountHolder createAccountHolder(profileTypes profileType) {
-		int id = getHolder_id();
+		int id = getIncrementalHolderId();
 		String password = generateSimplePassword(BusinessRules.getLenPassword());
-		AccountHolder accHolder = new AccountHolder(profileType, password, id);
-		existingAccountHolders.add(accHolder);
-		setHolder_id(id + 1);
+
+		AccountHolder accHolder = new AccountHolder(profileType.ordinal(), password, id);
+
+		AccountHolderStorage accHolderStorage = new AccountHolderStorage();
+		accHolderStorage.insertAccountHolder(id, password, profileType.ordinal());
+		setIncrementalHolderId(id + 1);
 		return accHolder;
 	}
 
@@ -27,8 +30,25 @@ public class AccountsManager {
 	 */
 	static Account createAccount(AccountHolder accountHolder) {
 		long accountNumber = generateAccountNumber(BusinessRules.getLenAccountnumber());
-		Account acc = new Account(accountNumber, accountHolder);
-		existingAccounts.add(acc);
+		Account acc = new Account(accountNumber, accountHolder.getId()); // initial balance = 0
+
+		/**
+		 * insertion on bd
+		 */
+		AccountStorage accStorage = new AccountStorage();
+		accStorage.insertAccount(accountNumber, BigDecimal.ZERO, accountHolder.getId());
+		return acc;
+	}
+
+	static Account createAccount(int accountHolderId) {
+		long accountNumber = generateAccountNumber(BusinessRules.getLenAccountnumber());
+		Account acc = new Account(accountNumber, accountHolderId); // initial balance = 0
+
+		/**
+		 * insertion on bd
+		 */
+		AccountStorage accStorage = new AccountStorage();
+		accStorage.insertAccount(accountNumber, BigDecimal.ZERO, accountHolderId);
 		return acc;
 	}
 
@@ -37,8 +57,27 @@ public class AccountsManager {
 	 */
 	static Account createAccount(BigDecimal startingBalance, AccountHolder accountHolder) {
 		long accountNumber = generateAccountNumber(BusinessRules.getLenAccountnumber());
-		Account acc = new Account(accountNumber, accountHolder, startingBalance);
-		existingAccounts.add(acc);
+		Account acc = new Account(accountNumber, accountHolder.getId(), startingBalance);
+
+		/**
+		 * insertion on bd
+		 */
+		AccountStorage accStorage = new AccountStorage();
+		accStorage.insertAccount(accountNumber, startingBalance, accountHolder.getId());
+
+		return acc;
+	}
+
+	static Account createAccount(BigDecimal startingBalance, int accountHolderId) {
+		long accountNumber = generateAccountNumber(BusinessRules.getLenAccountnumber());
+		Account acc = new Account(accountNumber, accountHolderId, startingBalance);
+
+		/**
+		 * insertion on bd
+		 */
+		AccountStorage accStorage = new AccountStorage();
+		accStorage.insertAccount(accountNumber, startingBalance, accountHolderId);
+
 		return acc;
 	}
 
@@ -82,8 +121,8 @@ public class AccountsManager {
 	 * classes can't access it directly, only get a copy
 	 */
 	public ArrayList<Account> listExistingAccounts() {
-		ArrayList<Account> accounts = new ArrayList<Account>(existingAccounts);
-		return accounts;
+		AccountStorage accStorage = new AccountStorage();
+		return accStorage.selectAllAccounts();
 	}
 
 	/**
@@ -91,15 +130,15 @@ public class AccountsManager {
 	 * other classes can't access it directly, only get a copy
 	 */
 	public ArrayList<AccountHolder> listExistingAccountHolders() {
-		ArrayList<AccountHolder> accountHolders = new ArrayList<AccountHolder>(existingAccountHolders);
-		return accountHolders;
+		AccountHolderStorage accHoldersStorage = new AccountHolderStorage();
+		return accHoldersStorage.selectAllAccountHolders();
 	}
 
-	public static int getHolder_id() {
-		return holder_id;
+	public static int getIncrementalHolderId() {
+		return incrementalHolderId;
 	}
 
-	public static void setHolder_id(int holder_id) {
-		AccountsManager.holder_id = holder_id;
+	public static void setIncrementalHolderId(int incrementalHolderId) {
+		AccountsManager.incrementalHolderId = incrementalHolderId;
 	}
 }
