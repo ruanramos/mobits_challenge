@@ -105,8 +105,8 @@ public class Transfer extends Transaction {
 		return String.format(
 				"Transaction Type: Transfer\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nOrigin Account number: %o\nDestination Account number: %o\nOrigin Account Balance: %o - %o = %o\nDestination Account Balance: %o + %o = %o\n",
 				getDate(), getTime(), value, getDescription(), origAccount.getAccountNumber(),
-				destAccount.getAccountNumber(), origBalance, value, origBalance.subtract(getValue()), destBalance,
-				value, destBalance.add(value));
+				destAccount.getAccountNumber(), origBalance, value, origBalance.subtract(value), destBalance, value,
+				destBalance.add(value));
 	}
 
 	/**

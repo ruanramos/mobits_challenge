@@ -39,6 +39,21 @@ public class Deposit extends Transaction {
 		return d;
 	}
 
+	@Override
+	public String toString() {
+		BigDecimal value = getValue();
+		Account destAccount = getDestinationAccount();
+		BigDecimal destBalance = destAccount.getBalance();
+
+		return String.format(
+				"Transaction Type: Deposit\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nAccount number: %o\nAccount Balance: %o + %o = %o\n",
+				getDate(), getTime(), value, getDescription(), destAccount.getAccountNumber(), destBalance, value,
+				destBalance.add(value));
+	}
+
+	/**
+	 * Getters and Setters
+	 */
 	public Account getDestinationAccount() {
 		return destinationAccount;
 	}
