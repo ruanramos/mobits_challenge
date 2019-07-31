@@ -9,13 +9,16 @@ import bank_management.BusinessRules.profileTypes;
 
 public class AccountsManager {
 
+	private static int holder_id = 0;
 	static ArrayList<Account> existingAccounts;
 	static ArrayList<AccountHolder> existingAccountHolders;
 
 	static AccountHolder createAccountHolder(profileTypes profileType) {
+		int id = getHolder_id();
 		String password = generateSimplePassword(BusinessRules.getLenPassword());
-		AccountHolder accHolder = new AccountHolder(profileType, password);
+		AccountHolder accHolder = new AccountHolder(profileType, password, id);
 		existingAccountHolders.add(accHolder);
+		setHolder_id(id + 1);
 		return accHolder;
 	}
 
@@ -90,5 +93,13 @@ public class AccountsManager {
 	public ArrayList<AccountHolder> listExistingAccountHolders() {
 		ArrayList<AccountHolder> accountHolders = new ArrayList<AccountHolder>(existingAccountHolders);
 		return accountHolders;
+	}
+
+	public static int getHolder_id() {
+		return holder_id;
+	}
+
+	public static void setHolder_id(int holder_id) {
+		AccountsManager.holder_id = holder_id;
 	}
 }
