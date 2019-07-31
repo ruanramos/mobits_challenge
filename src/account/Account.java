@@ -9,6 +9,7 @@ public class Account {
 
 	private long accountNumber;
 	private AccountHolder accountHolder;
+	private int accountHolderId;
 	/**
 	 * 
 	 * The decision of using BigDecimal is to avoid the inaccuracy of float and
@@ -19,17 +20,17 @@ public class Account {
 	private BigDecimal balance;
 	public ArrayList<Transaction> transactions;
 
-	public Account(long accountNumber, AccountHolder accountHolder) {
+	public Account(long accountNumber, int accountHolderId) {
 		this.accountNumber = accountNumber;
-		this.accountHolder = accountHolder;
+		this.accountHolderId = accountHolderId;
 
 		this.balance = BigDecimal.ZERO;
 		this.transactions = new ArrayList<Transaction>();
 	}
 
-	public Account(long accountNumber, AccountHolder accountHolder, BigDecimal balance) {
+	public Account(long accountNumber, int accountHolderId, BigDecimal balance) {
 		this.accountNumber = accountNumber;
-		this.accountHolder = accountHolder;
+		this.setAccountHolderId(accountHolderId);
 		this.balance = balance;
 
 		this.transactions = new ArrayList<Transaction>();
@@ -97,11 +98,19 @@ public class Account {
 	}
 
 	public AccountHolder getAccountHolder() {
-		return accountHolder;
+		return accountHolder; // TODO get from the bank with id provided on constructor
 	}
 
 	public void setAccountHolder(AccountHolder accountHolder) {
 		this.accountHolder = accountHolder;
+	}
+
+	public int getAccountHolderId() {
+		return accountHolderId;
+	}
+
+	public void setAccountHolderId(int accountHolderId) {
+		this.accountHolderId = accountHolderId;
 	}
 
 }
