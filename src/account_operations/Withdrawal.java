@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import account.Account;
-import account.AccountsManager;
 import bank_management.BusinessRules.profileTypes;
 import bank_management.BusinessRules;
 
@@ -71,10 +70,14 @@ public class Withdrawal extends Transaction {
 
 	@Override
 	public String toString() {
+		BigDecimal value = getValue();
+		Account account = getAccount();
+		BigDecimal balance = account.getBalance();
+
 		return String.format(
-				"Transaction Type: Withdrawal\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nAccount number: %o\nBalance Before: %o\nNew Balance: %o\n",
-				getDate(), getTime(), getValue(), getDescription(), getAccount().getAccountNumber(),
-				getAccount().getBalance(), getAccount().getBalance().subtract(getValue()));
+				"Transaction Type: Withdrawal\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nAccount number: %o\nBalance: %o - %o = %o\n",
+				getDate(), getTime(), value, getDescription(), account.getAccountNumber(), balance, value,
+				balance.subtract(value));
 	}
 
 	/**
