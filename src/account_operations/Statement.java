@@ -12,10 +12,6 @@ public class Statement {
 	private String description;
 	private Account account;
 
-	/**
-	 * Used a private constructor, instantiating the class with the static method
-	 * generateStatement() for encapsulation
-	 */
 	private Statement(LocalDateTime time, BigDecimal value, String description, Account account) {
 		this.time = time;
 		this.value = value;
@@ -23,6 +19,10 @@ public class Statement {
 		this.account = account;
 	}
 
+	/**
+	 * Used the static method generateStatement() because the class will only be
+	 * instantiated when the operation is completed,
+	 */
 	static Statement generateStatement(LocalDateTime time, BigDecimal value, String description, Account account) {
 
 		for (Transaction transaction : account.listTransactions()) {
