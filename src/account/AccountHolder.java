@@ -1,12 +1,11 @@
 package account;
 
-import bank_management.BusinessRules.profileTypes;
-
 public class AccountHolder {
 
 	private int id;
-	private profileTypes profileType;
+	private int profileType;
 	private Account account;
+	private long accountNumber;
 	/**
 	 * For security, we need to protect the password. We could use encryption or
 	 * hashing. Made the option for hashing, since it gives no way back and it's
@@ -14,18 +13,23 @@ public class AccountHolder {
 	 */
 	private String password;
 
-	public AccountHolder(profileTypes profileType, String password, int id) {
+	/**
+	 * Constructor without applying an account
+	 */
+	public AccountHolder(int profileType, String password, int id) {
 		this.profileType = profileType; // made profileType binded to the holder, not the account
 		this.password = password;
 		this.id = id;
 	}
 
-	public profileTypes getProfileType() {
-		return profileType;
-	}
-
-	public void setProfileType(profileTypes profileType) {
+	/**
+	 * Constructor applying an account
+	 */
+	public AccountHolder(int profileType, String password, int id, long accountNumber) {
 		this.profileType = profileType;
+		this.password = password;
+		this.id = id;
+		this.setAccountNumber(accountNumber);
 	}
 
 	public String getPassword() {
@@ -37,7 +41,7 @@ public class AccountHolder {
 	}
 
 	public Account getAccount() {
-		return account;
+		return account; // TODO get from bd using account id
 	}
 
 	public void setAccount(Account account) {
@@ -50,5 +54,21 @@ public class AccountHolder {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public long getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(long accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public int getProfileType() {
+		return profileType;
+	}
+
+	public void setProfileType(int profileType) {
+		this.profileType = profileType;
 	}
 }
