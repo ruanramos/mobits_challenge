@@ -2,7 +2,12 @@ package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import account.AccountHolder;
 
 public class AccountHolderStorage {
 
@@ -15,17 +20,49 @@ public class AccountHolderStorage {
 	 *                      possibilities
 	 * @param accountNumber account number of the holder, only one per holder
 	 */
-	public void insertAccountHolder(int id, String passwordHash, String profileType, long accountNumber) {
-		String sql = "INSERT INTO AccountHolders(id, password, profile_type, account_number) VALUES(?,?,?,?)";
+	public void insertAccountHolder(int id, String passwordHash, int profileType) {
+		String sql = "INSERT INTO AccountHolders(id, password, profile_type) VALUES(?,?,?)";
 
 		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, id);
 			pstmt.setString(2, passwordHash);
-			pstmt.setString(3, profileType);
-			pstmt.setLong(4, accountNumber);
+			pstmt.setInt(3, profileType);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * select all rows in the AccountHolders table
+	 */
+	public ArrayList<AccountHolder> selectAllAccountHolders() {
+		String sql = "SELECT * FROM AccountHolders";
+		ArrayList<AccountHolder> accountHolders = new ArrayList<AccountHolder>();
+
+		try (Connection conn = SQLiteConnection.connect();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql)) {
+
+			// loop through the result set
+			while (rs.next()) {
+				AccountHolder accHolder = new AccountHolder(rs.getInt("profile_type"), rs.getString("password"),
+						rs.getInt("id"));
+				accountHolders.add(accHolder);
+			}
+			return accountHolders;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+	public static void main(String[] args) {
+		AccountHolderStorage test = new AccountHolderStorage();
+		test.insertAccountHolder(4, "NAGISNGO", 1);
+		test.insertAccountHolder(5, "FNOAIS", 0);
+		for (AccountHolder a : test.selectAllAccountHolders()) {
+			System.out.println(a.getPassword());
 		}
 	}
 }
