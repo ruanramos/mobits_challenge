@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import account_operations.Transaction;
+import database.AccountHolderStorage;
 
 public class Account {
 
 	private long accountNumber;
-	private AccountHolder accountHolder;
 	private int accountHolderId;
 	/**
 	 * 
@@ -97,12 +97,13 @@ public class Account {
 		return transactionsList;
 	}
 
-	public AccountHolder getAccountHolder() {
-		return accountHolder; // TODO get from the bank with id provided on constructor
-	}
+	/**
+	 * Getter and Setter of account holder queries from the db using acc holder id
+	 */
 
-	public void setAccountHolder(AccountHolder accountHolder) {
-		this.accountHolder = accountHolder;
+	public AccountHolder getAccountHolder() {
+		AccountHolderStorage accHolderStorage = new AccountHolderStorage();
+		return accHolderStorage.selectAccountHolder(getAccountHolderId());
 	}
 
 	public int getAccountHolderId() {
