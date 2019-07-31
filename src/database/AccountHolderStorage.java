@@ -57,6 +57,25 @@ public class AccountHolderStorage {
 		return null;
 	}
 
+	public AccountHolder selectAccountHolder(int holderId) {
+		String sql = "SELECT * " + "FROM AccountHolders WHERE id = ?";
+		AccountHolder accHolder = null;
+
+		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setInt(1, holderId);
+			ResultSet rs = pstmt.executeQuery();
+
+			// loop through the result set
+			while (rs.next()) {
+				accHolder = new AccountHolder(rs.getInt("profile_type"), rs.getString("password"), rs.getInt("id"));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return accHolder;
+	}
+
 	public static void main(String[] args) {
 		AccountHolderStorage test = new AccountHolderStorage();
 		test.insertAccountHolder(4, "NAGISNGO", 1);
