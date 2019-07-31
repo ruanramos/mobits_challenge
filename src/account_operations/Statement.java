@@ -3,29 +3,36 @@ package account_operations;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 import account.Account;
 
-public class Statement extends Transaction {
+public class Statement {
 
+	private LocalDate date;
+	private LocalTime time;
+	private BigDecimal value;
+	private String description;
 	private Account account;
 
+	/**
+	 * Used a private constructor, instantiating the class with the static method
+	 * generateStatement() for encapsulation
+	 */
 	private Statement(LocalDate date, LocalTime time, BigDecimal value, String description, Account account) {
-		super(date, time, value, description);
+		this.date = date;
+		this.time = time;
+		this.value = value;
+		this.description = description;
 		this.account = account;
 	}
 
 	static Statement generateStatement(LocalDate date, LocalTime time, BigDecimal value, String description,
 			Account account) {
 
-		BigDecimal balance = account.getBalance();
-
-		for (Object transaction : account.listTransactions()) {
-			System.out.println(transaction.toString());
+		for (Transaction transaction : account.listTransactions()) {
+			System.out.println(transaction.toString()); // TODO Still needs to put parentheses on negative values
 		}
 		Statement s = new Statement(date, time, value, description, account);
-		s.getAccount().transactions.add(s);
 		return s;
 	}
 

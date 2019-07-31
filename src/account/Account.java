@@ -39,9 +39,9 @@ public class Account {
 	 * compareTo returns 0 if equals, 1 if grater than value, -1 if lesser than
 	 * value
 	 */
-	public static boolean checkEnoughFounds(BigDecimal balance, BigDecimal value) {
-		int enoughFounds = balance.compareTo(value);
-		if (enoughFounds < 0)
+	public static boolean checkEnoughFunds(BigDecimal balance, BigDecimal value) {
+		int enoughFunds = balance.compareTo(value);
+		if (enoughFunds < 0)
 			return false;
 		return true;
 	}
