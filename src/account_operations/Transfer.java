@@ -1,12 +1,11 @@
 package account_operations;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import account.Account;
-import bank_management.BusinessRules.profileTypes;
 import bank_management.BusinessRules;
+import bank_management.BusinessRules.profileTypes;
 
 public class Transfer extends Transaction {
 
@@ -20,18 +19,18 @@ public class Transfer extends Transaction {
 	 * Used a private constructor, instantiating the class with the static method
 	 * makeTransfer() for encapsulation
 	 */
-	private Transfer(LocalDate date, LocalTime time, BigDecimal value, String description, Account originAccount,
+	private Transfer(LocalDateTime time, BigDecimal value, String description, Account originAccount,
 			Account destinationAccount) {
-		super(date, time, value, description);
+		super(time, value, description);
 		this.originAccount = originAccount;
 		this.destinationAccount = destinationAccount;
 	}
 
 	// TODO treat errors better
-	static Transfer makeTransfer(LocalDate date, LocalTime time, BigDecimal value, String description,
-			Account originAccount, Account destinationAccount) {
+	static Transfer makeTransfer(LocalDateTime time, BigDecimal value, String description, Account originAccount,
+			Account destinationAccount) {
 
-		Transfer t = new Transfer(date, time, value, description, originAccount, destinationAccount);
+		Transfer t = new Transfer(time, value, description, originAccount, destinationAccount);
 
 		profileTypes originProfileType = originAccount.getAccountHolder().getProfileType();
 		BigDecimal originBalance = originAccount.getBalance();
@@ -103,8 +102,8 @@ public class Transfer extends Transaction {
 		BigDecimal destBalance = destAccount.getBalance();
 
 		return String.format(
-				"Transaction Type: Transfer\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nOrigin Account number: %o\nDestination Account number: %o\nOrigin Account Balance: %oR$ - %oR$ = %oR$\nDestination Account Balance: %oR$ + %oR$ = %oR$\n",
-				getDate(), getTime(), value, getDescription(), origAccount.getAccountNumber(),
+				"Transaction Type: Transfer\nDate: %o\nValue: %oR$\nDescription: %o\nOrigin Account number: %o\nDestination Account number: %o\nOrigin Account Balance: %oR$ - %oR$ = %oR$\nDestination Account Balance: %oR$ + %oR$ = %oR$\n",
+				getTime().toString(), value, getDescription(), origAccount.getAccountNumber(),
 				destAccount.getAccountNumber(), origBalance, value, origBalance.subtract(value), destBalance, value,
 				destBalance.add(value));
 	}

@@ -1,8 +1,7 @@
 package account_operations;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import account.Account;
 import bank_management.BusinessRules;
@@ -22,14 +21,13 @@ public class CallManager extends Transaction {
 	 * Used a private constructor, instantiating the class with the static method
 	 * makeManagerCall() for encapsulation
 	 */
-	private CallManager(LocalDate date, LocalTime time, BigDecimal value, String description, Account account) {
-		super(date, time, value, description);
+	private CallManager(LocalDateTime time, BigDecimal value, String description, Account account) {
+		super(time, value, description);
 		this.account = account;
 	}
 
 	// TODO treat errors better
-	static CallManager makeManagerCall(LocalDate date, LocalTime time, BigDecimal value, String description,
-			Account account) {
+	static CallManager makeManagerCall(LocalDateTime time, BigDecimal value, String description, Account account) {
 
 		profileTypes profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
@@ -61,7 +59,7 @@ public class CallManager extends Transaction {
 				}
 			}
 		}
-		CallManager cm = new CallManager(date, time, value, description, account);
+		CallManager cm = new CallManager(time, value, description, account);
 		cm.getAccount().transactions.add(cm);
 		return cm;
 	}
@@ -73,8 +71,8 @@ public class CallManager extends Transaction {
 		BigDecimal balance = account.getBalance();
 
 		return String.format(
-				"Transaction Type: Call Manager\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nBalance: %oR$ - %oR$ = %oR$\n",
-				getDate(), getTime(), value, getDescription(), account.getAccountNumber(), balance, value,
+				"Transaction Type: Call Manager\nDate: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nBalance: %oR$ - %oR$ = %oR$\n",
+				getTime().toString(), value, getDescription(), account.getAccountNumber(), balance, value,
 				balance.subtract(value));
 	}
 

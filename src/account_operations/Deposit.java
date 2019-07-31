@@ -1,8 +1,7 @@
 package account_operations;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import account.Account;
 
@@ -16,15 +15,14 @@ public class Deposit extends Transaction {
 	 * Used a private constructor, instantiating the class with the static method
 	 * makeDeposit() for encapsulation
 	 */
-	private Deposit(LocalDate date, LocalTime time, BigDecimal value, String description, Account destinationAccount) {
-		super(date, time, value, description);
+	private Deposit(LocalDateTime time, BigDecimal value, String description, Account destinationAccount) {
+		super(time, value, description);
 		this.destinationAccount = destinationAccount;
 	}
 
 	// TODO treat errors better
-	static Deposit makeDeposit(LocalDate date, LocalTime time, BigDecimal value, String description,
-			Account destinationAccount) {
-		Deposit d = new Deposit(date, time, value, description, destinationAccount);
+	static Deposit makeDeposit(LocalDateTime time, BigDecimal value, String description, Account destinationAccount) {
+		Deposit d = new Deposit(time, value, description, destinationAccount);
 
 		try {
 			Account.addBalance(destinationAccount, value);
@@ -46,8 +44,8 @@ public class Deposit extends Transaction {
 		BigDecimal destBalance = destAccount.getBalance();
 
 		return String.format(
-				"Transaction Type: Deposit\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nAccount Balance: %oR$ + %oR$ = %oR$\n",
-				getDate(), getTime(), value, getDescription(), destAccount.getAccountNumber(), destBalance, value,
+				"Transaction Type: Deposit\nDate: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nAccount Balance: %oR$ + %oR$ = %oR$\n",
+				getTime().toString(), value, getDescription(), destAccount.getAccountNumber(), destBalance, value,
 				destBalance.add(value));
 	}
 

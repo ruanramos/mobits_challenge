@@ -1,12 +1,11 @@
 package account_operations;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import account.Account;
-import bank_management.BusinessRules.profileTypes;
 import bank_management.BusinessRules;
+import bank_management.BusinessRules.profileTypes;
 
 public class Withdrawal extends Transaction {
 
@@ -19,14 +18,13 @@ public class Withdrawal extends Transaction {
 	 * makeWithdrawal() because the class will only be instantiated when the
 	 * operation is completed,
 	 */
-	private Withdrawal(LocalDate date, LocalTime time, BigDecimal value, String description, Account account) {
-		super(date, time, value, description);
+	private Withdrawal(LocalDateTime time, BigDecimal value, String description, Account account) {
+		super(time, value, description);
 		this.account = account;
 	}
 
 	// TODO treat errors better
-	static Withdrawal makeWithdrawal(LocalDate date, LocalTime time, BigDecimal value, String description,
-			Account account) {
+	static Withdrawal makeWithdrawal(LocalDateTime time, BigDecimal value, String description, Account account) {
 
 		profileTypes profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
@@ -64,7 +62,7 @@ public class Withdrawal extends Transaction {
 				}
 			}
 		}
-		Withdrawal w = new Withdrawal(date, time, value, description, account);
+		Withdrawal w = new Withdrawal(time, value, description, account);
 		w.getAccount().transactions.add(w);
 		return w;
 	}
@@ -76,8 +74,8 @@ public class Withdrawal extends Transaction {
 		BigDecimal balance = account.getBalance();
 
 		return String.format(
-				"Transaction Type: Withdrawal\nDate: %o\nHour: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nBalance: %oR$ - %oR$ = %oR$\n",
-				getDate(), getTime(), value, getDescription(), account.getAccountNumber(), balance, value,
+				"Transaction Type: Withdrawal\nDate: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nBalance: %oR$ - %oR$ = %oR$\n",
+				getTime().toString(), value, getDescription(), account.getAccountNumber(), balance, value,
 				balance.subtract(value));
 	}
 
