@@ -53,4 +53,23 @@ public class AccountStorage {
 		}
 		return null;
 	}
+
+	public Account selectAccount(long accNumber) {
+		String sql = "SELECT * " + "FROM Accounts WHERE number = ?";
+		Account acc = null;
+
+		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setLong(1, accNumber);
+			ResultSet rs = pstmt.executeQuery();
+
+			// loop through the result set
+			while (rs.next()) {
+				acc = new Account(rs.getLong("number"), rs.getInt("holder_id"), rs.getBigDecimal("balance"));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return acc;
+	}
 }
