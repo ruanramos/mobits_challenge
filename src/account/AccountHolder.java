@@ -16,7 +16,7 @@ public class AccountHolder {
 	/**
 	 * Constructor without applying an account
 	 */
-	public AccountHolder(int profileType, String password, int id) {
+	public AccountHolder(int id, String password, int profileType) {
 		this.profileType = profileType; // made profileType binded to the holder, not the account
 		this.password = password;
 		this.id = id;
@@ -25,7 +25,7 @@ public class AccountHolder {
 	/**
 	 * Constructor applying an account
 	 */
-	public AccountHolder(int profileType, String password, int id, long accountNumber) {
+	public AccountHolder(int id, String password, int profileType, long accountNumber) {
 		this.profileType = profileType;
 		this.password = password;
 		this.id = id;
