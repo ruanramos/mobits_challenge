@@ -94,6 +94,21 @@ public class Transfer extends Transaction {
 		return (value.compareTo(BusinessRules.getNormalMaxTransferValue()) < 0);
 	}
 
+	@Override
+	public String toString() {
+		BigDecimal value = getValue();
+		Account origAccount = getOriginAccount();
+		Account destAccount = getDestinationAccount();
+		BigDecimal origBalance = origAccount.getBalance();
+		BigDecimal destBalance = destAccount.getBalance();
+
+		return String.format(
+				"Transaction Type: Transfer\nDate: %o\nHour: %o\nValue: %o\nDescription: %o\nOrigin Account number: %o\nDestination Account number: %o\nOrigin Account Balance: %o - %o = %o\nDestination Account Balance: %o + %o = %o\n",
+				getDate(), getTime(), value, getDescription(), origAccount.getAccountNumber(),
+				destAccount.getAccountNumber(), origBalance, value, origBalance.subtract(getValue()), destBalance,
+				value, destBalance.add(value));
+	}
+
 	/**
 	 * Getters and Setters
 	 */
