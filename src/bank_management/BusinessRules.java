@@ -9,9 +9,13 @@ public class BusinessRules {
 	 */
 	private static final int lenAccountNumber = 5;
 	private static final int lenPassword = 4;
+	private static final long adminAccountNumber = 12345;
+	private static final String adminPassword = "1234";
+
+	public static final int loginAttemptsPermited = 3;
 
 	public static enum profileTypes {
-		NORMAL, VIP;
+		NORMAL, VIP, ADMIN;
 	}
 
 	/**
@@ -59,7 +63,7 @@ public class BusinessRules {
 	}
 
 	public enum TransactionTypes {
-		WITHDRAWAL(0), DEPOSIT(1), TRANSFER(2), CALL_MANAGER(3);
+		WITHDRAWAL(10), DEPOSIT(11), TRANSFER(12), STATEMENT(13), CALL_MANAGER(14);
 
 		private final int code;
 
