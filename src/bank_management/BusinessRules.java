@@ -63,7 +63,7 @@ public class BusinessRules {
 	}
 
 	public enum TransactionTypes {
-		WITHDRAWAL(10), DEPOSIT(11), TRANSFER(12), STATEMENT(13), CALL_MANAGER(14);
+		WITHDRAWAL(10), DEPOSIT(11), TRANSFER(12), VIEW_BALANCE(13), STATEMENT(14), CALL_MANAGER(15);
 
 		private final int code;
 
