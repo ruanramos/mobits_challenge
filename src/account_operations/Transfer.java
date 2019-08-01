@@ -2,11 +2,14 @@ package account_operations;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import account.Account;
 import bank_management.BusinessRules;
+import bank_management.BusinessRules.TransactionTypes;
 import bank_management.BusinessRules.profileTypes;
 import database.AccountStorage;
+import database.TransactionStorage;
 
 public class Transfer extends Transaction {
 
@@ -16,9 +19,9 @@ public class Transfer extends Transaction {
 	private long destinationAccountNumber;
 	private BigDecimal feeCharged;
 
-	public Transfer(int id, LocalDateTime time, BigDecimal value, String description, long originAccountNumber,
+	public Transfer(LocalDateTime time, BigDecimal value, String description, long originAccountNumber,
 			long destinationAccountNumber) {
-		super(id, time, value, description);
+		super(time, value, description);
 		this.type = BusinessRules.TransactionTypes.TRANSFER.ordinal();
 		this.originAccountNumber = originAccountNumber;
 		this.destinationAccountNumber = destinationAccountNumber;
@@ -29,10 +32,10 @@ public class Transfer extends Transaction {
 	 * instantiated when the operation is completed,
 	 */
 	// TODO treat errors better
-	static Transfer makeTransfer(int id, LocalDateTime time, BigDecimal value, String description,
+	public static Transfer makeTransfer(LocalDateTime time, BigDecimal value, String description,
 			long originAccountNumber, long destinationAccountNumber) {
 
-		Transfer t = new Transfer(id, time, value, description, originAccountNumber, destinationAccountNumber);
+		Transfer t = new Transfer(time, value, description, originAccountNumber, destinationAccountNumber);
 
 		Account destinationAccount = t.getDestinationAccount();
 		Account originAccount = t.getOriginAccount();
@@ -91,6 +94,15 @@ public class Transfer extends Transaction {
 		}
 		t.getOriginAccount().transactions.add(t);
 		t.getDestinationAccount().transactions.add(t);
+
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+		String formattedDateTime = time.format(formatter);
+
+		TransactionStorage.insertTransaction(t.getId(), destinationAccountNumber, formattedDateTime, value, description,
+				TransactionTypes.TRANSFER.toString());
+		TransactionStorage.insertTransaction(t.getId(), originAccountNumber, formattedDateTime, value, description,
+				TransactionTypes.TRANSFER.toString());
+
 		return t;
 	}
 

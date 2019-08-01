@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import account_operations.Transaction;
 import database.AccountHolderStorage;
+import database.AccountStorage;
 
 public class Account {
 
@@ -19,6 +20,8 @@ public class Account {
 	 */
 	private BigDecimal balance;
 	public ArrayList<Transaction> transactions;
+
+	private static AccountStorage accStorage = new AccountStorage();
 
 	public Account(long accountNumber, int accountHolderId) {
 		this.accountNumber = accountNumber;
@@ -52,9 +55,9 @@ public class Account {
 		try {
 			BigDecimal newBalance = account.getBalance().subtract(value);
 			account.setBalance(newBalance);
-			System.out.println("Operation successfully completed. New balance: " + newBalance);
+			accStorage.updateAccountBalance(account.getAccountNumber(), newBalance);
 		} catch (Exception e) {
-			System.out.println("Error: " + e);
+			System.out.println("Error: could not complete operation");
 		}
 	}
 
@@ -63,9 +66,9 @@ public class Account {
 		try {
 			BigDecimal newBalance = account.getBalance().add(value);
 			account.setBalance(newBalance);
-			System.out.println("Operation successfully completed. New balance: " + newBalance);
+			accStorage.updateAccountBalance(account.getAccountNumber(), newBalance);
 		} catch (Exception e) {
-			System.out.println("Error: " + e);
+			System.out.println("Error: could not complete operation");
 		}
 	}
 

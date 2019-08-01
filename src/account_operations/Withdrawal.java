@@ -2,11 +2,14 @@ package account_operations;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import account.Account;
 import bank_management.BusinessRules;
+import bank_management.BusinessRules.TransactionTypes;
 import bank_management.BusinessRules.profileTypes;
 import database.AccountStorage;
+import database.TransactionStorage;
 
 public class Withdrawal extends Transaction {
 
@@ -14,10 +17,10 @@ public class Withdrawal extends Transaction {
 
 	private long accountNumber;
 
-	public Withdrawal(int id, LocalDateTime time, BigDecimal value, String description, long accountNumber) {
-		super(id, time, value, description);
+	public Withdrawal(LocalDateTime time, BigDecimal value, String description, long accountNumber) {
+		super(time, value, description);
 		this.type = BusinessRules.TransactionTypes.WITHDRAWAL.ordinal();
-		this.setAccountNumber(accountNumber);
+		this.accountNumber = accountNumber;
 	}
 
 	/**
@@ -25,11 +28,12 @@ public class Withdrawal extends Transaction {
 	 * instantiated when the operation is completed,
 	 */
 	// TODO treat errors better
-	static Withdrawal makeWithdrawal(int id, LocalDateTime time, BigDecimal value, String description,
+	public static Withdrawal makeWithdrawal(LocalDateTime time, BigDecimal value, String description,
 			long accountNumber) {
-		Withdrawal w = new Withdrawal(id, time, value, description, accountNumber);
+		Withdrawal w = new Withdrawal(time, value, description, accountNumber);
 
 		Account account = w.getAccount();
+
 		int profileType = account.getAccountHolder().getProfileType();
 		BigDecimal balance = account.getBalance();
 		boolean enoughFunds = Account.checkEnoughFunds(balance, value);
@@ -38,7 +42,7 @@ public class Withdrawal extends Transaction {
 			if (enoughFunds) {
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
-						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
+						"Withdrawal of %sR$ from account number %d finished successfully.\nNew balance: %.2fR$.",
 						value.toString(), account.getAccountNumber(), account.getBalance()));
 			} else {
 				System.out.println(String.format("%s %o.",
@@ -48,7 +52,7 @@ public class Withdrawal extends Transaction {
 			if (enoughFunds) {
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
-						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$.",
+						"Withdrawal of %sR$ from account number %d finished successfully.\nNew balance: %fR$.",
 						value.toString(), account.getAccountNumber(), account.getBalance()));
 			} else {
 				/**
@@ -56,7 +60,7 @@ public class Withdrawal extends Transaction {
 				 */
 				Account.subtractBalance(account, value);
 				System.out.println(String.format(
-						"Withdrawal of %oR$ from account number %o finished successfully.\nNew balance: %oR$. You are beeing taxed, negative balance!",
+						"Withdrawal of %sR$ from account number %d finished successfully.\nNew balance: %fR$. You are beeing taxed, negative balance!",
 						value.toString(), account.getAccountNumber(), account.getBalance()));
 				BigDecimal currentBalance;
 				while (account.getBalance().compareTo(BigDecimal.ZERO) < 0) {
@@ -68,6 +72,11 @@ public class Withdrawal extends Transaction {
 		}
 
 		w.getAccount().transactions.add(w);
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+		String formattedDateTime = time.format(formatter);
+
+		TransactionStorage.insertTransaction(w.getId(), accountNumber, formattedDateTime, value, description,
+				TransactionTypes.TRANSFER.toString());
 		return w;
 	}
 
@@ -78,7 +87,7 @@ public class Withdrawal extends Transaction {
 		BigDecimal balance = account.getBalance();
 
 		return String.format(
-				"Transaction Type: Withdrawal\nDate: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nBalance: %oR$ - %oR$ = %oR$\n",
+				"Transaction Type: Withdrawal\nDate: %s\nValue: %fR$\nDescription: %s\nAccount number: %d\nBalance: %fR$ - %fR$ = %fR$\n",
 				getTime().toString(), value, getDescription(), account.getAccountNumber(), balance, value,
 				balance.subtract(value));
 	}
@@ -88,7 +97,7 @@ public class Withdrawal extends Transaction {
 	 */
 	public Account getAccount() {
 		AccountStorage accStorage = new AccountStorage();
-		return accStorage.selectAccount(getAccountNumber());
+		return accStorage.selectAccount(accountNumber);
 	}
 
 	public long getAccountNumber() {

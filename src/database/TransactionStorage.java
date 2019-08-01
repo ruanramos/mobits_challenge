@@ -14,7 +14,6 @@ import account_operations.Deposit;
 import account_operations.Transaction;
 import account_operations.Transfer;
 import account_operations.Withdrawal;
-import bank_management.BusinessRules;
 
 public class TransactionStorage {
 
@@ -30,7 +29,7 @@ public class TransactionStorage {
 	 * @param description   description of the transaction
 	 * @param type          type of transaction
 	 */
-	public void insertTransaction(int id, long accountNumber, String time, BigDecimal value, String description,
+	public static void insertTransaction(int id, long accountNumber, String time, BigDecimal value, String description,
 			String type) {
 		String sql = "INSERT INTO Transactions(id, account_number, time, value, description, type) VALUES(?,?,?,?,?,?)";
 
@@ -47,7 +46,7 @@ public class TransactionStorage {
 		}
 	}
 
-	public long[] selectAccountsInvolvedInTransaction(int transactionId) {
+	public static long[] selectAccountsInvolvedInTransaction(int transactionId) {
 		String sql = "SELECT account_number " + "FROM Transactions WHERE id = ?";
 		long[] accountNumbers = { (long) 0, (long) 0 }; // default initialization
 		int index = 0;
@@ -68,7 +67,7 @@ public class TransactionStorage {
 		return accountNumbers;
 	}
 
-	public ArrayList<Transaction> selectTransactionsFromAccount(long accountNumber) {
+	public static ArrayList<Transaction> selectTransactionsFromAccount(long accountNumber) {
 		String sql = "SELECT * " + "FROM Transactions WHERE account_number = ?";
 		ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
@@ -86,26 +85,26 @@ public class TransactionStorage {
 				BigDecimal value = rs.getBigDecimal("value");
 				String description = rs.getString("description");
 
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ss");
+				DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 				LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
 
 				switch (transactionType) {
 				case 0:
-					Withdrawal w = new Withdrawal(transactionId, dateTime, value, description, accountNumber1);
+					Withdrawal w = new Withdrawal(dateTime, value, description, accountNumber1);
 					transactions.add(w);
 					break;
 				case 1:
-					Deposit d = new Deposit(transactionId, dateTime, value, description, accountNumber1);
+					Deposit d = new Deposit(dateTime, value, description, accountNumber1);
 					transactions.add(d);
 					break;
 				case 2:
 					long[] accounts = selectAccountsInvolvedInTransaction(transactionId);
 					// TODO make sure origin account gets queried before destination account
-					Transfer t = new Transfer(transactionId, dateTime, value, description, accounts[0], accounts[1]);
+					Transfer t = new Transfer(dateTime, value, description, accounts[0], accounts[1]);
 					transactions.add(t);
 					break;
 				case 3:
-					CallManager cm = new CallManager(rs.getInt("id"), dateTime, value, description, accountNumber1);
+					CallManager cm = new CallManager(dateTime, value, description, accountNumber1);
 					transactions.add(cm);
 					break;
 				default:
@@ -116,12 +115,5 @@ public class TransactionStorage {
 			System.out.println(e.getMessage());
 		}
 		return transactions;
-	}
-
-	public static void main(String[] args) {
-		TransactionStorage test = new TransactionStorage();
-
-		test.insertTransaction(1, (long) 00003, LocalDateTime.now().toString(), new BigDecimal("20"),
-				"testando a transação", BusinessRules.TransactionTypes.DEPOSIT.toString());
 	}
 }

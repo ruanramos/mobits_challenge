@@ -18,11 +18,18 @@ public abstract class Transaction {
 	protected int type;
 	private int id;
 
-	public Transaction(int id, LocalDateTime time, BigDecimal value, String description) {
-		this.id = id;
+	public static int idCounter = 0;
+
+	public Transaction(LocalDateTime time, BigDecimal value, String description) {
+		this.id = nextId();
 		this.time = time;
 		this.value = value;
 		this.description = description;
+	}
+
+	private static synchronized int nextId() {
+		idCounter++;
+		return idCounter;
 	}
 
 	static BigDecimal applyFixedTax(BigDecimal value, BigDecimal fixedTax) {

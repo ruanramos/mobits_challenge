@@ -10,7 +10,7 @@ import database.SQLiteConnection;
 public class Validation {
 
 	public static boolean validateAccountNumber(long accountNumber) {
-		String sql = "SELECT * " + "FROM Accounts WHERE number = ?";
+		String sql = "SELECT * FROM Accounts WHERE number = ?";
 
 		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setLong(1, accountNumber);

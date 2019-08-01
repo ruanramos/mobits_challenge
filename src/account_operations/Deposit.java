@@ -2,10 +2,13 @@ package account_operations;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import account.Account;
 import bank_management.BusinessRules;
+import bank_management.BusinessRules.TransactionTypes;
 import database.AccountStorage;
+import database.TransactionStorage;
 
 public class Deposit extends Transaction {
 
@@ -13,8 +16,8 @@ public class Deposit extends Transaction {
 
 	private long destinationAccountNumber;
 
-	public Deposit(int id, LocalDateTime time, BigDecimal value, String description, long destinationAccountNumber) {
-		super(id, time, value, description);
+	public Deposit(LocalDateTime time, BigDecimal value, String description, long destinationAccountNumber) {
+		super(time, value, description);
 		this.type = BusinessRules.TransactionTypes.DEPOSIT.ordinal();
 		this.setDestinationAccountNumber(destinationAccountNumber);
 	}
@@ -24,21 +27,26 @@ public class Deposit extends Transaction {
 	 * instantiated when the operation is completed,
 	 */
 	// TODO treat errors better
-	static Deposit makeDeposit(int id, LocalDateTime time, BigDecimal value, String description,
+	public static Deposit makeDeposit(LocalDateTime time, BigDecimal value, String description,
 			long destinationAccountNumber) {
-		Deposit d = new Deposit(id, time, value, description, destinationAccountNumber);
+		Deposit d = new Deposit(time, value, description, destinationAccountNumber);
 		Account destinationAccount = d.getDestinationAccount();
 
 		try {
 			Account.addBalance(destinationAccount, value);
 			System.out.println(
-					String.format("Deposit of %oR$ to account number %o finished successfully.\nNew balance: %o",
+					String.format("Deposit of %sR$ to account number %d finished successfully.\nNew balance: %f",
 							value.toString(), destinationAccount.getAccountNumber(), destinationAccount.getBalance()));
 		} catch (Exception e) {
 			System.out.println(String.format("Error: Could not complete the deposit"));
 		}
 
 		d.getDestinationAccount().transactions.add(d);
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+		String formattedDateTime = time.format(formatter);
+
+		TransactionStorage.insertTransaction(d.getId(), destinationAccountNumber, formattedDateTime, value, description,
+				TransactionTypes.DEPOSIT.toString());
 		return d;
 	}
 
@@ -49,7 +57,7 @@ public class Deposit extends Transaction {
 		BigDecimal destBalance = destAccount.getBalance();
 
 		return String.format(
-				"Transaction Type: Deposit\nDate: %o\nValue: %oR$\nDescription: %o\nAccount number: %o\nAccount Balance: %oR$ + %oR$ = %oR$\n",
+				"Transaction Type: Deposit\nDate: %s\nValue: %fR$\nDescription: %s\nAccount number: %d\nAccount Balance: %fR$ + %fR$ = %fR$\n",
 				getTime().toString(), value, getDescription(), destAccount.getAccountNumber(), destBalance, value,
 				destBalance.add(value));
 	}

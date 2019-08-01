@@ -2,11 +2,14 @@ package account_operations;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import account.Account;
 import bank_management.BusinessRules;
+import bank_management.BusinessRules.TransactionTypes;
 import bank_management.BusinessRules.profileTypes;
 import database.AccountStorage;
+import database.TransactionStorage;
 
 public class CallManager extends Transaction {
 
@@ -18,9 +21,10 @@ public class CallManager extends Transaction {
 
 	private long accountNumber;
 
-	public CallManager(int id, LocalDateTime time, BigDecimal value, String description, long accountNumber) {
-		super(id, time, value, description);
+	public CallManager(LocalDateTime time, BigDecimal value, String description, long accountNumber) {
+		super(time, value, description);
 		this.type = BusinessRules.TransactionTypes.CALL_MANAGER.ordinal();
+		this.setValue(BusinessRules.getCallmanagertax());
 		this.setAccountNumber(accountNumber);
 	}
 
@@ -29,9 +33,9 @@ public class CallManager extends Transaction {
 	 * instantiated when the operation is completed,
 	 */
 	// TODO treat errors better
-	static CallManager makeManagerCall(int id, LocalDateTime time, BigDecimal value, String description,
+	public static CallManager makeManagerCall(LocalDateTime time, BigDecimal value, String description,
 			long accountNumber) {
-		CallManager cm = new CallManager(id, time, value, description, accountNumber);
+		CallManager cm = new CallManager(time, value, description, accountNumber);
 
 		Account account = cm.getAccount();
 		int profileType = account.getAccountHolder().getProfileType();
@@ -64,6 +68,12 @@ public class CallManager extends Transaction {
 				}
 			}
 		}
+		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+		String formattedDateTime = time.format(formatter);
+
+		TransactionStorage.insertTransaction(cm.getId(), accountNumber, formattedDateTime, value, description,
+				TransactionTypes.CALL_MANAGER.toString());
+
 		cm.getAccount().transactions.add(cm);
 		return cm;
 	}

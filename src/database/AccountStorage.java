@@ -54,6 +54,9 @@ public class AccountStorage {
 		return null;
 	}
 
+	/**
+	 * Get account by its number
+	 */
 	public Account selectAccount(long accNumber) {
 		String sql = "SELECT * " + "FROM Accounts WHERE number = ?";
 		Account acc = null;
@@ -64,12 +67,53 @@ public class AccountStorage {
 			ResultSet rs = pstmt.executeQuery();
 
 			// loop through the result set
-			while (rs.next()) {
+			if (rs.next()) {
 				acc = new Account(rs.getLong("number"), rs.getInt("holder_id"), rs.getBigDecimal("balance"));
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+
+		if (acc == null) {
+			System.out.println("Account not found");
+			return null;
+		}
 		return acc;
+	}
+
+	public BigDecimal selectAccountBalance(long accNumber) {
+		String sql = "SELECT balance FROM Accounts WHERE number = ?";
+		BigDecimal balance = null;
+
+		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setLong(1, accNumber);
+			ResultSet rs = pstmt.executeQuery();
+
+			// loop through the result set
+			if (!rs.next()) {
+				System.out.println("Account not found");
+				return null;
+			} else {
+				balance = rs.getBigDecimal("balance");
+				return balance;
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return balance;
+	}
+
+	public void updateAccountBalance(long accNumber, BigDecimal value) {
+		String sql = "UPDATE Accounts SET balance = ? " + "WHERE number = ?";
+
+		try (Connection conn = SQLiteConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setBigDecimal(1, value);
+			pstmt.setLong(2, accNumber);
+
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

@@ -7,8 +7,6 @@ import bank_management.BusinessRules.profileTypes;
 
 public class UserOptionsMenu {
 
-	static private long accNumber;
-
 	/**
 	 * Just to be clear, tried to make an MVP with the really important things
 	 * needed to do what was asked on the description of the challenge. That's the
@@ -28,8 +26,8 @@ public class UserOptionsMenu {
 	static final int callManagerCode = TransactionTypes.CALL_MANAGER.ordinal();
 
 	public enum UserOptions {
-		LOGIN(0, "Login to an existing account", normalPermissionCode),
-		CHANGE_ACCOUNT(1, "Login to another account", normalPermissionCode),
+		LOGIN(8, "Login to an existing account", normalPermissionCode),
+		CHANGE_ACCOUNT(9, "Login to another account", normalPermissionCode),
 		MAKE_WITHDRAWAL(withdrawalCode, "Make a Withdrawal of an account", normalPermissionCode),
 		VIEW_BALANCE(viewBalanceCode, "View balance of an account", normalPermissionCode),
 		MAKE_DEPOSIT(depositCode, "Make a deposit on an account", normalPermissionCode),
@@ -67,124 +65,153 @@ public class UserOptionsMenu {
 		}
 	}
 
-	private static int displayMenu(int permissionCode) {
+	public static int displayMenu(int permissionCode, long accNumber) {
 		int chosenOption = 0;
 		System.out.println(
-				String.format("Logged in as account number %o.\n\nChoose what operation you want to do:", accNumber));
+				String.format("Logged in as account number %d.\n\nChoose what operation you want to do:", accNumber));
 
 		if (permissionCode == normalPermissionCode) {
-			displayNormalMenu();
+			chosenOption = displayNormalMenu(accNumber);
 		} else if (permissionCode == VIPPermissionCode) {
-			displayVIPMenu();
+			chosenOption = displayVIPMenu(accNumber);
 		} else if (permissionCode == adminPermissionCode) {
-			displayAdminMenu();
+			chosenOption = displayAdminMenu(accNumber);
 		}
 		return chosenOption;
 	}
 
-	private static void displayNormalMenu() {
+	private static int displayNormalMenu(long accNumber) {
 		Scanner inOption = new Scanner(System.in);
-		// Display the menu
-		System.out.println(String.format("1\t %o", UserOptions.MAKE_WITHDRAWAL));
-		System.out.println(String.format("2\t %o", UserOptions.VIEW_BALANCE));
-		System.out.println(String.format("3\t %o", UserOptions.MAKE_DEPOSIT));
-		System.out.println(String.format("4\t %o", UserOptions.MAKE_TRANSFER));
-		System.out.println(String.format("5\t %o", UserOptions.GENERATE_STATEMENT));
-		System.out.println(String.format("6\t %o", UserOptions.CHANGE_ACCOUNT));
+		int choice = 0;
 
-		System.out.println("Option: ");
+		do {
+			System.out.println("1\t" + UserOptions.MAKE_WITHDRAWAL.description);
+			System.out.println("2\t" + UserOptions.VIEW_BALANCE.description);
+			System.out.println("3\t" + UserOptions.MAKE_DEPOSIT.description);
+			System.out.println("4\t" + UserOptions.MAKE_TRANSFER.description);
+			System.out.println("5\t" + UserOptions.GENERATE_STATEMENT.description);
+			System.out.println("6\t" + UserOptions.CHANGE_ACCOUNT.description);
 
-		int choice = inOption.nextInt();
+			System.out.println("Option: ");
+			try {
+				choice = inOption.nextInt();
+				if (choice < 1 || choice > 6) {
+					System.out.println("not a valid option!");
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		} while (choice < 1 || choice > 6);
 
 		switch (choice) {
 		case 1:
-
+			OperationsMenu.WithdrawalMenu(accNumber);
 			break;
 		case 2:
-
+			OperationsMenu.ViewBalanceMenu(accNumber);
 			break;
 		case 3:
-
+			OperationsMenu.DespositMenu();
 			break;
 		case 4:
-
+			OperationsMenu.TransferMenu(accNumber);
 			break;
 		case 5:
-
+			OperationsMenu.StatementMenu(accNumber);
 			break;
 		case 6:
-
+			OperationsMenu.ChangeAccountMenu();
 			break;
 		default:
 			System.out.println("Invalid choice");
 		}
+		return choice;
 	}
 
-	private static void displayVIPMenu() {
+	private static int displayVIPMenu(long accNumber) {
 		Scanner inOption = new Scanner(System.in);
-		// Display the menu
-		System.out.println(String.format("1\t %o", UserOptions.MAKE_WITHDRAWAL));
-		System.out.println(String.format("2\t %o", UserOptions.VIEW_BALANCE));
-		System.out.println(String.format("3\t %o", UserOptions.MAKE_DEPOSIT));
-		System.out.println(String.format("4\t %o", UserOptions.MAKE_TRANSFER));
-		System.out.println(String.format("5\t %o", UserOptions.GENERATE_STATEMENT));
-		System.out.println(String.format("6\t %o", UserOptions.CALL_MANAGER));
-		System.out.println(String.format("7\t %o", UserOptions.CHANGE_ACCOUNT));
+		int choice = 0;
 
-		System.out.println("Option: ");
+		do {
+			System.out.println("1\t" + UserOptions.MAKE_WITHDRAWAL.description);
+			System.out.println("2\t" + UserOptions.VIEW_BALANCE.description);
+			System.out.println("3\t" + UserOptions.MAKE_DEPOSIT.description);
+			System.out.println("4\t" + UserOptions.MAKE_TRANSFER.description);
+			System.out.println("5\t" + UserOptions.GENERATE_STATEMENT.description);
+			System.out.println("6\t" + UserOptions.CALL_MANAGER.description);
+			System.out.println("7\t" + UserOptions.CHANGE_ACCOUNT.description);
 
-		int choice = inOption.nextInt();
+			System.out.println("Option: ");
+			try {
+				choice = inOption.nextInt();
+				if (choice < 1 || choice > 7) {
+					System.out.println("not a valid option!");
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		} while (choice < 1 || choice > 7);
 
 		switch (choice) {
 		case 1:
-
+			OperationsMenu.WithdrawalMenu(accNumber);
 			break;
 		case 2:
-
+			OperationsMenu.ViewBalanceMenu(accNumber);
 			break;
 		case 3:
-
+			OperationsMenu.DespositMenu();
 			break;
 		case 4:
-
+			OperationsMenu.TransferMenu(accNumber);
 			break;
 		case 5:
-
+			OperationsMenu.StatementMenu(accNumber);
 			break;
 		case 6:
-
+			OperationsMenu.CallManagerMenu(accNumber);
 			break;
 		case 7:
-
+			OperationsMenu.ChangeAccountMenu();
 			break;
 		default:
 			System.out.println("Invalid choice");
 		}
+		return choice;
 	}
 
-	private static void displayAdminMenu() {
+	private static int displayAdminMenu(long accNumber) {
 		Scanner inOption = new Scanner(System.in);
-		// Display the menu
-		System.out.println(String.format("1\t %o", UserOptions.CREATE_ACCOUNT_HOLDER));
-		System.out.println(String.format("2\t %o", UserOptions.CREATE_ACCOUNT));
-		System.out.println(String.format("3\t %o", UserOptions.CHANGE_ACCOUNT));
+		int choice = 0;
+		do {
+			System.out.println("1\t" + UserOptions.CREATE_ACCOUNT_HOLDER.description);
+			System.out.println("2\t" + UserOptions.CREATE_ACCOUNT.description);
+			System.out.println("3\t" + UserOptions.CHANGE_ACCOUNT.description);
 
-		System.out.println("Option: ");
-
-		int choice = inOption.nextInt();
+			System.out.println("Option: ");
+			try {
+				choice = inOption.nextInt();
+				if (choice < 1 || choice > 3) {
+					System.out.println("not a valid option!");
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		} while (choice < 1 || choice > 3);
 
 		switch (choice) {
 		case 1:
-
+			OperationsMenu.CreateAccountHolderMenu();
 			break;
 		case 2:
-
+			OperationsMenu.CreateAccountMenu();
 			break;
 		case 3:
-
+			OperationsMenu.ChangeAccountMenu();
 			break;
 		default:
 			System.out.println("Invalid choice");
 		}
+		return choice;
 	}
 }
